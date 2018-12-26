@@ -77,6 +77,15 @@ ul {
 }
 
 #tableRow {
-    height: 260px;
+    height: 1080px;
     overflow-y: scroll;
+}
+
+#onLoaded {
+    opacity: 0;
+    transition: opacity 1s linear;
+}
+
+#onLoaded.fadeIn {
+    opacity: 1;
 }

@@ -4,8 +4,8 @@ $(document).ready(function() { // On page load gets the JSON data from ./static/
         $.getJSON('js/cards.json')
     ).done(function(json) {
         jsonData = json;
-        $("#onLoading").attr("hidden", true)
-        $("#onLoaded").attr("hidden", false)
+        $("#onLoading").attr("hidden", true);
+        $("#onLoaded").attr("class", "container-fluid fadeIn");
     });
 }); // On page load gets the JSON data from ./static/js/cards.json
 
@@ -28,9 +28,7 @@ function objectToMarkup(object, outList) { // Takes object and returns string of
             output += "<tr class='dataCols'><td>" + i + "</td><td>" + object[i] + "</td></tr>";
         }
     }
-    output += ""
     return output;
-
 } // Takes object and returns string of li tags 
 
 function renameBlank(object, newName) { // Takes object and renames the blank key "" to string newName
@@ -44,7 +42,6 @@ function renameBlank(object, newName) { // Takes object and renames the blank ke
 function toggleActive(el) { // Removes class "active" from all elements with class ".dropdown-item" then adds class "active" to clicked element "el"
     $(".dropdown-item").attr("class", "dropdown-item");
     $(el).attr("class","dropdown-item active");
-    
 }  // Removes class "active" from all elements with class ".dropdown-item" then adds class "active" to clicked element "el"
 
 function writeDataToDOM(el, data) { // Writes data "data" to string of element id "el" 
@@ -88,7 +85,7 @@ function parseSetData(type) {
         el.innerHTML += "<tr><td>Artists</td><td><ul>" + objectToMarkup(sortedArtists) + "</ul></td></tr>";
 }
 */
-function getAllOfKey(key) {
+function getAllOfKey(key) { // Takes string "key" and gets all keys in jsonData with name "key"
     var testString = "";
     var allKeys = {};
     for (var set in jsonData.sets) {
@@ -123,5 +120,5 @@ function getAllOfKey(key) {
     }
     delete allKeys[undefined];
     return allKeys;
-}
+}  // Takes string "key" and gets all keys in jsonData with name "key"
 
