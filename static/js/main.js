@@ -48,38 +48,26 @@ function writeDataToDOM(el, data) { // Writes data "data" to string of element i
     $("#" + el)[0].innerHTML = objectToMarkup(data);
 } // Writes data "data" to string of element id "el"
 
-function getSetData(type) {
-    var data = jsonData.sets;
-    var setData = {}
-    var trueName = data[type]["name"];
-    if (data[type]["series"] === "EX") {
-        trueName = "EX " + data[type]["name"];
+function getSetData(key) { // Takes set name string "key" and returns object of data of set
+    var trueName = jsonData.sets[key]["name"];
+    if (jsonData.sets[key]["series"] === "EX") {
+        trueName = "EX " + jsonData.sets[key]["name"];
     }
-    else if (data[type]["name"] === "Base") {
+    else if (jsonData.sets[key]["name"] === "Base") {
         trueName = "Base Set";
     }
-    var splitdate = data[type].releaseDate.split("/");
+    var splitdate = jsonData.sets[key].releaseDate.split("/");
     $("#expansionDropdown")[0].innerHTML = trueName;
-    var artists = {};
-    for (var card in data[type].cards) {
-        console.log("Supertype: " + data[type].cards[card].supertype);
-        if (data[type].cards[card].artist in artists) {
-            artists[data[type].cards[card].artist] += 1;
-        }
-        else {
-            artists[data[type].cards[card].artist] = 1;
-        }
-    }
     return {
         "Set Name" : trueName,
-        "Total Cards" : data[type].totalCards,
-        "Series Name" : data[type].series,
+        "Total Cards" : jsonData.sets[key].totalCards,
+        "Series Name" : jsonData.sets[key].series,
         "Release Date" : splitdate[1] + "/" + splitdate[0] + "/" + splitdate[2],
-        "Standard Legal" : data[type].standardLegal,
-        "Expanded Legal" : data[type].expandedLegal,
-        "Artists" : "<table class='subTable'><tbody>" + objectToMarkup(sortObjectByValueNumber(artists)) + "</tbody></table>",
+        "Standard Legal" : jsonData.sets[key].standardLegal,
+        "Expanded Legal" : jsonData.sets[key].expandedLegal,
+        "Artists" : "<table class='subTable'><tbody>" + objectToMarkup(sortObjectByValueNumber(getAllFromSet("artist", jsonData.sets[key].cards))) + "</tbody></table>",
     };
-}
+} // Takes set name string "key" and returns object of data of set
 
 function getAllOfKey(key) { // Takes string "key" and gets all keys in jsonData with name "key"
     var testString = "";
@@ -118,3 +106,16 @@ function getAllOfKey(key) { // Takes string "key" and gets all keys in jsonData 
     delete allKeys[undefined];
     return sortObjectByValueNumber(allKeys);
 } // Takes string "key" and gets all keys in jsonData with name "key"
+
+function getAllFromSet(key, set) {
+    var allKeys = {};
+    for (var card in set) {
+        if (set[card][key] in allKeys) {
+            allKeys[set[card][key]] += 1;
+        }
+        else {
+            allKeys[set[card][key]] = 1;
+        }
+    }
+    return allKeys;
+}
