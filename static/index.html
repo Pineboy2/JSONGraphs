@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Pokemon TCG</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+	<link rel="stylesheet" href="style/index.css" type="text/css" />
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAEACABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAACAAP///wAVFdQALS3rANbW1gAAAL8AQkJCAAAARwBcXFwAAACoANvb2wAzMzMA6OjoAFJSUgAAAIoAvb29ANHR0QDy8vIAAAB4AAAAawAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDAwMDAwAAAAAAAAAAAcHEBAQEBAQBwcAAAAAAAcQEBERERERERAQBwAAAA4QERELCwsLCwsRERAOAAAOEBELDQ0NDQ0NCxEQDgAJEAsNDRIAAAAAEg0NCxAJCRALEhIAAAUFAAASEgsQCQAAAAAAAAUCAgUAAAAAAAAAAAAAAAAFAgIFAAAAAAAACAEKBgMAAAUFAAADBgoBCAgBCgYDAwAAAAADAwYKAQgAFAEKAwMDAwMDAwYKARQAABQBCgYDAwMDAwYGCgEUAAAAFAEKBAMDAwMECgEUAAAAAAATEwoEBAQEChMTAAAAAAAAAAAPDw8PDw8AAAAAAPgfAADgBwAAwAMAAIABAACAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAEAAIABAADAAwAA4AcAAPgfAAA="
+	 rel="icon" type="image/x-icon" />
+</head>
+
+<body>
+	<div id="onLoading" class="container-fluid">
+		<div id="onLoadingAlign" class="row d-flex align-items-center justify-content-center">
+			<ul>
+				<li class="loadingIcon"></li>
+				<li class="text-center">Loading JSON</li>
+			</ul>
+		</div>
+	</div>
+	<div id="onLoaded" class="container-fluid" hidden>
+		<div class="row">
+			<div class="col dropdown">
+				<button class="dropdown-toggle btn btn-dark" type="button" id="expansionDropdown" data-toggle="dropdown">Select Expansion</button>
+				<div id="expansionDropdownMenu" class="dropdown-menu">
+					<div id="multi-column" class="row">
+						<div class="col-xs-2">
+							<div class="dropdown-header">Generation 1 Expansions</div>
+							<div class="dropdown-divider"></div>
+							<button class="dropdown-item" type="button" onclick='parseSetData("base1");toggleActive(this);'>Base Set</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("base2");toggleActive(this);'>Jungle</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("basep");toggleActive(this);'>Wizards Promos</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("base3");toggleActive(this);'>Fossil</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("base4");toggleActive(this);'>Base Set 2</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("base5");toggleActive(this);'>Team Rocket</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("gym1");toggleActive(this);'>Gym Heroes</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("gym2");toggleActive(this);'>Gym Challenge</button>
+						</div>
+						<div class="col-xs-2">
+							<div class="dropdown-header">Generation 2 Expansions</div>
+							<div class="dropdown-divider"></div>
+							<button class="dropdown-item" type="button" onclick='parseSetData("neo1");toggleActive(this);'>Neo Genesis</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("neo2");toggleActive(this);'>Neo Discovery</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("neo3");toggleActive(this);'>Neo Revelation</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("neo4");toggleActive(this);'>Neo Destiny</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("base6");toggleActive(this);'>Legendary Collection</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ecard1");toggleActive(this);'>Expedition Base Set</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ecard2");toggleActive(this);'>Aquapolis</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ecard3");toggleActive(this);'>Skyridge</button>
+						</div>
+						<div class="col-xs-2">
+							<div class="dropdown-header">Generation 3 Expansions</div>
+							<div class="dropdown-divider"></div>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex1");toggleActive(this);'>EX Ruby & Sapphire</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex3");toggleActive(this);'>EX Dragon</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex2");toggleActive(this);'>EX Sandstorm</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex4");toggleActive(this);'>EX Team Magma vs Team Aqua</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex5");toggleActive(this);'>EX Hidden Legends</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex6");toggleActive(this);'>EX FireRed & LeafGreen</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex7");toggleActive(this);'>EX Team Rocket Returns</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex8");toggleActive(this);'>EX Deoxys</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex9");toggleActive(this);'>EX Emerald</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex10");toggleActive(this);'>EX Unseen Forces</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex11");toggleActive(this);'>EX Delta Species</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex12");toggleActive(this);'>EX Legend Maker</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex13");toggleActive(this);'>EX Holon Phantoms</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex14");toggleActive(this);'>EX Crystal Guardians</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex15");toggleActive(this);'>EX Dragon Frontiers</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("ex16");toggleActive(this);'>EX Power Keepers</button>
+						</div>
+						<div class="col-xs-2">
+							<div class="dropdown-header">Generation 4 Expansions</div>
+							<div class="dropdown-divider"></div>
+							<button class="dropdown-item" type="button" onclick='parseSetData("dp1");toggleActive(this);'>Diamond & Pearl</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("dp2");toggleActive(this);'>Mysterious Treasures</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("dp3");toggleActive(this);'>Secret Wonders</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("dp4");toggleActive(this);'>Great Encounters</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("dp5");toggleActive(this);'>Majestic Dawn</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("dp6");toggleActive(this);'>Legends Awakened</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("dp7");toggleActive(this);'>Stormfront</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("pl1");toggleActive(this);'>Platinum</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("pl2");toggleActive(this);'>Rising Rivals</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("pl3");toggleActive(this);'>Supreme Victors</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("pl4");toggleActive(this);'>Arceus</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("hgss1");toggleActive(this);'>HeartGold & SoulSilver</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("hgss2");toggleActive(this);'>HS-Unleashed</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("hgss3");toggleActive(this);'>HS-Undaunted</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("hgss4");toggleActive(this);'>HS-Triumphant</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("col1");toggleActive(this);'>Call of Legends</button>
+						</div>
+						<div class="col-xs-2">
+							<div class="dropdown-header">Generation 5 Expansions</div>
+							<div class="dropdown-divider"></div>
+							<button class="dropdown-item" type="button" onclick='parseSetData("bwp");toggleActive(this);'>Black & White Promos</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("bw1");toggleActive(this);'>Black & White</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("bw2");toggleActive(this);'>Emerging Powers</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("bw3");toggleActive(this);'>Noble Victories</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("bw4");toggleActive(this);'>Next Destinies</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("bw5");toggleActive(this);'>Dark Explorers</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("bw6");toggleActive(this);'>Dragons Exhalted</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("dv1");toggleActive(this);'>Dragon Vault</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("bw7");toggleActive(this);'>Boundaries Crossed</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("bw8");toggleActive(this);'>Plasma Storm</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("bw9");toggleActive(this);'>Plasma Freeze</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("bw10");toggleActive(this);'>Plasma Blast</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("bw11");toggleActive(this);'>Legendary Treasures</button>
+						</div>
+						<div class="col-xs-2">
+							<div class="dropdown-header">Generation 6 Expansions</div>
+							<div class="dropdown-divider"></div>
+							<button class="dropdown-item" type="button" onclick='parseSetData("xyp");toggleActive(this);'>XY Promos</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("xy0");toggleActive(this);'>Kalos Starter Set</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("xy1");toggleActive(this);'>XY</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("xy2");toggleActive(this);'>Flashfire</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("xy3");toggleActive(this);'>Furious Fists</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("xy4");toggleActive(this);'>Phantom Forces</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("xy5");toggleActive(this);'>Primal Clash</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("dc1");toggleActive(this);'>Double Crisis</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("xy6");toggleActive(this);'>Roaring Skies</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("xy7");toggleActive(this);'>Ancient Origins</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("xy8");toggleActive(this);'>BREAKthrough</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("xy9");toggleActive(this);'>BREAKpoint</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("g1");toggleActive(this);'>Generations</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("xy10");toggleActive(this);'>Fates Collide</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("xy11");toggleActive(this);'>Steam Siege</button>
+						</div>
+						<div class="col-xs-2">
+							<div class="dropdown-header">Generation 7 Expansions</div>
+							<div class="dropdown-divider"></div>
+							<button class="dropdown-item" type="button" onclick='parseSetData("smp");toggleActive(this);'>Sun & Moon Promos</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("sm1");toggleActive(this);'>Sun & Moon</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("sm2");toggleActive(this);'>Guardians Rising</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("sm3");toggleActive(this);'>Burning Shadows</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("sm35");toggleActive(this);'>Shining Legends</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("sm4");toggleActive(this);'>Crimson Invasion</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("sm5");toggleActive(this);'>Ultra Prism</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("sm6");toggleActive(this);'>Forbidden Light</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("sm7");toggleActive(this);'>Celestial Storm</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("sm75");toggleActive(this);'>Dragon Majesty</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("sm8");toggleActive(this);'>Lost Thunder</button>
+						</div>
+						<div class="col-xs-2">
+							<div class="dropdown-header">POP Expansions</div>
+							<div class="dropdown-divider"></div>
+							<button class="dropdown-item" type="button" onclick='parseSetData("pop1");toggleActive(this);'>POP Series 1</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("pop2");toggleActive(this);'>POP Series 2</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("pop3");toggleActive(this);'>POP Series 3</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("pop4");toggleActive(this);'>POP Series 4</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("pop5");toggleActive(this);'>POP Series 5</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("pop6");toggleActive(this);'>POP Series 6</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("pop7");toggleActive(this);'>POP Series 7</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("pop8");toggleActive(this);'>POP Series 8</button>
+							<button class="dropdown-item" type="button" onclick='parseSetData("pop9");toggleActive(this);'>POP Series 9</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col dropdown">
+				<button class="dropdown-toggle btn btn-dark" type="button" id="totalDropdown" data-toggle="dropdown">Select Data Type</button>
+				<div class="dropdown-menu">
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('artist'));">Artist</button>
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('convertedRetreatCost'));">Converted Retreat Cost</button>
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('evolvesFrom'));">Evolves From</button>
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('hp'));">HP</button>
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('level'));">Level</button>
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('name'));">Name</button>
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('nationalPokedexNumber'));">National Pokedex Number</button>
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('rarity'));">Rarity</button>
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('subtype'));">Subtype</button>
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('supertype'));">Supertype</button>
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('types'));">Types</button>
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('weaknesses'));">Weaknesses</button>
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('evolvesTo'));">Evolves To</button>
+					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('resistances'));">Resistances</button>
+					<!-- Wordy Bois
+					<button disabled class="dropdown-item" onclick="writeDataToDOM('allKeyOut', getAllOfKey('ability'));">Ability</button>
+					<button disabled class="dropdown-item" onclick="writeDataToDOM('allKeyOut', getAllOfKey('ancientTrait'));">Ancient Trait</button>
+					<button disabled class="dropdown-item" onclick="writeDataToDOM('allKeyOut', getAllOfKey('attacks'));">Attacks</button>
+					<button disabled class="dropdown-item" onclick="writeDataToDOM('allKeyOut', getAllOfKey('text'));">Card Text</button>
+					-->
+				</div>
+			</div>
+		</div>
+		<div id="tableRow" class="row">
+			<table class="col">
+				<tbody id="dataOut"></tbody>
+			</table>
+			<table class="col">
+				<tbody id="allKeyOut"></tbody>
+			</table>
+		</div>
+	</div>
+</body>
+
+</html>
