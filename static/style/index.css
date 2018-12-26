@@ -6,6 +6,26 @@ tr:nth-child(odd) {
     background-color: #eee;
 }
 
+tr:nth-child(even) .subTable tr:nth-child(even) {
+    background-color: #ccc;
+}
+
+tr:nth-child(even) .subTable tr:nth-child(odd) {
+    background-color: #eee;
+}
+
+tr:nth-child(odd) .subTable tr:nth-child(even) {
+    background-color: #ddd;
+}
+
+tr:nth-child(odd) .subTable tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+tr:nth-child(odd) .subTable td:nth-child(even) {
+    text-align: right;
+}
+
 .dropdown-menu {
     overflow-x: hidden;
     max-height: 90vh;
@@ -76,4 +96,8 @@ ul {
 
 #onLoaded.fadeIn {
     opacity: 1;
+}
+
+.subTable td{
+    padding: 0;
 }
