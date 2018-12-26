@@ -1,13 +1,9 @@
-img {
-    width: 10%;
-}
-
 tr:nth-child(even) {
     background-color: #ddd;
 }
 
-tr:nth-child(even)>td>ul>li:nth-child(odd) {
-    background-color: #fff;
+tr:nth-child(odd) {
+    background-color: #eee;
 }
 
 .dropdown-menu {
@@ -26,14 +22,6 @@ th {
 
 .dropdown-toggle {
     width: 100%;
-}
-
-#multi-column {
-    width: 95%;
-}
-
-.dropdown-divider {
-    width: 300px;
 }
 
 ul {

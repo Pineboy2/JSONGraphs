@@ -41,50 +41,46 @@ function renameBlank(object, newName) { // Takes object and renames the blank ke
 
 function toggleActive(el) { // Removes class "active" from all elements with class ".dropdown-item" then adds class "active" to clicked element "el"
     $(".dropdown-item").attr("class", "dropdown-item");
-    $(el).attr("class","dropdown-item active");
-}  // Removes class "active" from all elements with class ".dropdown-item" then adds class "active" to clicked element "el"
+    $(el).attr("class", "dropdown-item active");
+} // Removes class "active" from all elements with class ".dropdown-item" then adds class "active" to clicked element "el"
 
 function writeDataToDOM(el, data) { // Writes data "data" to string of element id "el" 
-    $("#"+el)[0].innerHTML = objectToMarkup(sortObjectByValueNumber(data));
+    $("#" + el)[0].innerHTML = objectToMarkup(data);
 } // Writes data "data" to string of element id "el"
-/*
-function parseSetData(type) {
-    const colours = { true: "text-success", false: "text-danger" };
-    var el = document.getElementById("dataOut");
-    el.innerHTML = "<tr><th>Key</th><th>Value</th></tr>";
-        data = data.sets;
-        var trueName = data[type]["name"];
-        if (data[type]["series"] === "EX") {
-            trueName = "EX " + data[type]["name"];
+
+function getSetData(type) {
+    var data = jsonData.sets;
+    var setData = {}
+    var trueName = data[type]["name"];
+    if (data[type]["series"] === "EX") {
+        trueName = "EX " + data[type]["name"];
+    }
+    else if (data[type]["name"] === "Base") {
+        trueName = "Base Set";
+    }
+    var splitdate = data[type].releaseDate.split("/");
+    $("#expansionDropdown")[0].innerHTML = trueName;
+    var artists = {};
+    for (var card in data[type].cards) {
+        console.log("Supertype: " + data[type].cards[card].supertype);
+        if (data[type].cards[card].artist in artists) {
+            artists[data[type].cards[card].artist] += 1;
         }
-        else if (data[type]["name"] === "Base") {
-            trueName = "Base Set";
+        else {
+            artists[data[type].cards[card].artist] = 1;
         }
-        var standardcolour = colours[data[type].standardLegal];
-        var expandedcolour = colours[data[type].expandedLegal];
-        var splitdate = data[type].releaseDate.split("/");
-        el.innerHTML += "<tr><td>Set Name</td><td>" + trueName + "</td></tr>";
-        el.innerHTML += "<tr><td>Total Cards</td><td>" + data[type].totalCards + "</td></tr>";
-        el.innerHTML += "<tr><td>Series Name</td><td>" + data[type].series + "</td></tr>";
-        el.innerHTML += "<tr><td>Release Date</td><td>" + splitdate[1] + "/" + splitdate[0] + "/" + splitdate[2] + "</td></tr>";
-        el.innerHTML += "<tr><td>Standard Legal</td><td class='" + standardcolour + "'>" + data[type].standardLegal + "</td></tr>";
-        el.innerHTML += "<tr><td>Expanded Legal</td><td class='" + expandedcolour + "'>" + data[type].expandedLegal + "</td></tr>";
-        $("#expansionDropdown")[0].innerHTML = trueName;
-        var artists = {};
-        for (var card in data[type].cards) {
-            console.log("Supertype: " + data[type].cards[card].supertype);
-            if (data[type].cards[card].artist in artists) {
-                artists[data[type].cards[card].artist] += 1;
-            }
-            else {
-                artists[data[type].cards[card].artist] = 1;
-            }
-        }
-        var sortedArtists = sortObjectByValueNumber(artists);
-        var artistOut = "";
-        el.innerHTML += "<tr><td>Artists</td><td><ul>" + objectToMarkup(sortedArtists) + "</ul></td></tr>";
+    }
+    return {
+        "Set Name" : trueName,
+        "Total Cards" : data[type].totalCards,
+        "Series Name" : data[type].series,
+        "Release Date" : splitdate[1] + "/" + splitdate[0] + "/" + splitdate[2],
+        "Standard Legal" : data[type].standardLegal,
+        "Expanded Legal" : data[type].expandedLegal,
+        "Artists" : "<table class='subTable'><tbody>" + objectToMarkup(sortObjectByValueNumber(artists)) + "</tbody></table>",
+    };
 }
-*/
+
 function getAllOfKey(key) { // Takes string "key" and gets all keys in jsonData with name "key"
     var testString = "";
     var allKeys = {};
@@ -94,13 +90,14 @@ function getAllOfKey(key) { // Takes string "key" and gets all keys in jsonData 
                 if (key === "weaknesses" || key === "resistances") {
                     if (jsonData.sets[set].cards[card][key] !== undefined) {
                         if (jsonData.sets[set].cards[card][key][0] !== undefined) {
-                           testString = jsonData.sets[set].cards[card][key][0].type + " " + jsonData.sets[set].cards[card][key][0].value;
-                        } else {
+                            testString = jsonData.sets[set].cards[card][key][0].type + " " + jsonData.sets[set].cards[card][key][0].value;
+                        }
+                        else {
                             testString = "None";
                         }
                     }
                     else {
-                            testString = "None";
+                        testString = "None";
                     }
                 }
                 else {
@@ -119,6 +116,5 @@ function getAllOfKey(key) { // Takes string "key" and gets all keys in jsonData 
         }
     }
     delete allKeys[undefined];
-    return allKeys;
-}  // Takes string "key" and gets all keys in jsonData with name "key"
-
+    return sortObjectByValueNumber(allKeys);
+} // Takes string "key" and gets all keys in jsonData with name "key"
