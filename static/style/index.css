@@ -101,3 +101,7 @@ ul {
 .subTable td{
     padding: 0;
 }
+.diagonalX .x.axis text {
+    text-anchor: end !important;
+    transform: rotate(-45deg);
+}
