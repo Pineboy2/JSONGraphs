@@ -15,7 +15,8 @@ function makeGraphs(cardData) {
 
     showCardsPerSet(ndx, cardData);
     showArtistsPerSet(ndx, cardData);
-
+    showArtistsPerSet2(ndx, cardData);
+    
     dc.renderAll();
 }
 
@@ -40,14 +41,77 @@ function showCardsPerSet(ndx, cardData) {
 }
 
 function showArtistsPerSet(ndx, cardData) {
+    function getArtist(dimension, artist) {
+        return dimension.group().reduce(
+            function(p, v) {
+                p.total++;
+                if (v.artist == artist) {
+                    p.match++;
+                }
+                return p;
+            },
+            function(p, v) {
+                p.total--;
+                if (v.artist == artist) {
+                    p.match--;
+                }
+                return p;
+            },
+            function() {
+                return { total: 0, match: 0 };
+            }
+        );
+    }
     var dim = ndx.dimension(dc.pluck("code"));
     var group = dim.group();
+    var kenSugimori = getArtist(dim, "Ken Sugimori");
     dc.barChart("#KenSugimori")
         .keyAccessor(function(d){
             return cardData.sets[d.key].name;
         })
         .valueAccessor(function(d){
             return getAllFromSet("artist", cardData.sets[d.key].cards)["Ken Sugimori"];
+        })
+        .width(5000)
+        .height(500)
+        .margins({top: 10, right: 50, bottom: 100, left: 30})
+        .x(d3.scaleBand())
+        .xUnits(dc.units.ordinal)
+        .dimension(dim)
+        .group(group);
+}
+
+function showArtistsPerSet2(ndx, cardData) {
+    function getArtist(dimension, artist) {
+        return dimension.group().reduce(
+            function(p, v) {
+                p.total++;
+                if (v.artist == artist) {
+                    p.match++;
+                }
+                return p;
+            },
+            function(p, v) {
+                p.total--;
+                if (v.artist == artist) {
+                    p.match--;
+                }
+                return p;
+            },
+            function() {
+                return { total: 0, match: 0 };
+            }
+        );
+    }
+    var dim = ndx.dimension(dc.pluck("code"));
+    var group = dim.group();
+    var fbGraphics = getArtist(dim, "5ban Graphics");
+    dc.barChart("#FBGraphics")
+        .keyAccessor(function(d){
+            return cardData.sets[d.key].name;
+        })
+        .valueAccessor(function(d){
+            return getAllFromSet("artist", cardData.sets[d.key].cards)["5ban Graphics"];
         })
         .width(5000)
         .height(500)

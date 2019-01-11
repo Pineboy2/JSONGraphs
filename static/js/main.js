@@ -1,5 +1,6 @@
 var jsonData = null;
-$(document).ready(function() { // On page load gets the JSON data from ./static/js/cards.json
+
+$(document).ready(function() { // On page load gets the JSON data from ./static/js/cards.json and hide loading screen
     $.when(
         $.getJSON('js/cards.json')
     ).done(function(json) {
@@ -7,7 +8,7 @@ $(document).ready(function() { // On page load gets the JSON data from ./static/
         $("#onLoading").attr("hidden", true);
         $("#onLoaded").attr("class", "container-fluid fadeIn");
     });
-}); // On page load gets the JSON data from ./static/js/cards.json
+}); // On page load gets the JSON data from ./static/js/cards.json and hide loading screen
 
 function sortObjectByValueNumber(object) { // Takes object and returns object sorted by value numerically 
     var arrayList = Object.keys(object).sort(function(a, b) { return object[a] - object[b] }).reverse();
@@ -18,14 +19,20 @@ function sortObjectByValueNumber(object) { // Takes object and returns object so
     return sortingArray;
 } // Takes object and returns object sorted by value numerically 
 
-function objectToMarkup(object, outList) { // Takes object and returns string of li tags 
+function objectToMarkup(object, makeCols) { // Takes object and returns string of li tags 
+        var bigCol= "";
+        var smallCol = "";
+    if (makeCols === true) {
+        bigCol= "class='col-9'";
+        smallCol = "class='col-3'";
+    }
     var output = "";
     for (var i in object) {
         if (i === "") {
-            output += "<tr class='dataCols text-danger'><td>JSON WAS BLANK</td><td>" + object[i] + "</td></tr>";
+            output += "<tr class='dataCols text-danger'><td " + bigCol + ">JSON WAS BLANK</td><td " + smallCol + ">" + object[i] + "</td></tr>";
         }
         else {
-            output += "<tr class='dataCols'><td>" + i + "</td><td>" + object[i] + "</td></tr>";
+            output += "<tr class='dataCols'><td " + bigCol + ">" + i + "</td><td " + smallCol + ">" + object[i] + "</td></tr>";
         }
     }
     return output;
@@ -65,7 +72,9 @@ function getSetData(key) { // Takes set name string "key" and returns object of 
         "Release Date" : splitdate[1] + "/" + splitdate[0] + "/" + splitdate[2],
         "Standard Legal" : jsonData.sets[key].standardLegal,
         "Expanded Legal" : jsonData.sets[key].expandedLegal,
-        "Artists" : "<table class='subTable'><tbody>" + objectToMarkup(sortObjectByValueNumber(getAllFromSet("artist", jsonData.sets[key].cards))) + "</tbody></table>",
+        "Artists" : "<table class='subTable'><tbody class='container'>" + objectToMarkup(sortObjectByValueNumber(getAllFromSet("artist", jsonData.sets[key].cards)), true) + "</tbody></table>",
+        "Card Names" : "<table class='subTable'><tbody class='container'>" + objectToMarkup(getAllFromSet("name", jsonData.sets[key].cards), true) + "</tbody></table>",
+        "Pokedex Number" : "<table class='subTable'><tbody class='container'>" + objectToMarkup(getAllFromSet("nationalPokedexNumber", jsonData.sets[key].cards), true) + "</tbody></table>",
     };
 } // Takes set name string "key" and returns object of data of set
 
@@ -105,9 +114,9 @@ function getAllOfKey(key) { // Takes string "key" and gets all keys in jsonData 
     }
     delete allKeys[undefined];
     return sortObjectByValueNumber(allKeys);
-} // Takes string "key" and gets all keys in jsonData with name "key"
+} // Takes key name string "key"and returns object with all keys in jsonData with name "key"
 
-function getAllFromSet(key, set) {
+function getAllFromSet(key, set) { // Takes key name string "key" and set name object property "set" and returns all keys in "set" with name "key"
     var allKeys = {};
     for (var card in set) {
         if (set[card][key] in allKeys) {
@@ -118,4 +127,4 @@ function getAllFromSet(key, set) {
         }
     }
     return allKeys;
-}
+} // Takes key name string "key" and set name object property "set" and returns object with all keys in "set" with name "key"
