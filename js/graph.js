@@ -83,6 +83,9 @@ function showArtistsPerSet(ndx, cardData) {
         .dimension(dim)
         .group(artistsGroup, "Ken Sugimori")
         .valueAccessor(function(d) { return d.value.kSugimori; })
+        .keyAccessor(function(d) {
+            return cardData.sets[d.key].name;
+        })
         .stack(artistsGroup, "5ban Graphics", function(d) {
             return d.value.fBan
         })
