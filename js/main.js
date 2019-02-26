@@ -6,6 +6,7 @@ $(document).ready(function() { // On page load gets the JSON data from ./static/
     ).done(function(json) {
         jsonData = json;
         $("#loading").attr("hidden", true);
+        $("#graphs").attr("hidden", false);
     });
 }); // On page load gets the JSON data from ./static/js/cards.json and hide loading screen
 
