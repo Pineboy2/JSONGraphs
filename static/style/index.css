@@ -50,7 +50,7 @@ ul {
     margin-bottom: 0;
 }
 
-#onLoadingAlign {
+#loadingAlign {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -87,15 +87,6 @@ ul {
 #tableRow {
     height: 1080px;
     overflow-y: scroll;
-}
-
-#onLoaded {
-    opacity: 0;
-    transition: opacity 1s linear;
-}
-
-#onLoaded.fadeIn {
-    opacity: 1;
 }
 
 .subTable td{

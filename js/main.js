@@ -5,8 +5,7 @@ $(document).ready(function() { // On page load gets the JSON data from ./static/
         $.getJSON('js/cards.json')
     ).done(function(json) {
         jsonData = json;
-        $("#onLoading").attr("hidden", true);
-        $("#onLoaded").attr("class", "container-fluid fadeIn");
+        $("#loading").attr("hidden", true);
     });
 }); // On page load gets the JSON data from ./static/js/cards.json and hide loading screen
 

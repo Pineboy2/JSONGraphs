@@ -26,21 +26,27 @@
 </head>
 
 <body>
-	<div id="onLoading" class="container-fluid">
-		<div id="onLoadingAlign" class="row d-flex align-items-center justify-content-center">
+	<header class="navbar navbar-dark bg-dark">
+		<span class="navbar-brand">Pokemon TCG Data Dashboard</span>
+		<button class="btn btn-dark" onclick="$('#text').attr('hidden', true);$('#graphs').attr('hidden', false)">Graph Viewer</a>
+		<button class="btn btn-dark" onclick="$('#text').attr('hidden', false);$('#graphs').attr('hidden', true)">Text Viewer</a>
+		<button class="btn btn-dark" onclick="dc.refocusAll()">Reset All</a>
+	</header>
+	<div id="loading" class="container-fluid">
+		<div id="loadingAlign" class="row d-flex align-items-center justify-content-center">
 			<ul>
 				<li class="loadingIcon"></li>
 				<li class="text-center text-muted">Loading JSON</li>
 			</ul>
 		</div>
 	</div>
-	<button onclick="dc.refocusAll()">Reset All</button>
-	<div id="onLoaded" class="container-fluid">
+	<section id="graphs"class="container-fluid">
 		<div class="row">
 			<div class="col-4">Number of cards per set</div>
-			<div class="col-4">&nbsp</div>
+			<div class="col-4">Types of cards</div>
 			<div class="col-4">&nbsp</div>
 			<div id="CardsPerSet" class="col-4 diagonalX">&nbsp</div>
+			<div id="CardTypes" class="col-4">&nbsp</div>
 		</div>
 		<div class="row">
 			<div class="col-4">Number of cards illustrated by top 5 artists</div>
@@ -48,13 +54,15 @@
 			<div class="col-4">&nbsp</div>
 			<div id="ArtistStack" class="col-4 diagonalX">&nbsp</div>
 		</div>
+	</section>
+	<section id="text" class="container-fluid" hidden>
 		<div class="row">
 			<div class="col-6 dropdown">
 				<button class="dropdown-toggle btn btn-dark" type="button" id="expansionDropdown" data-toggle="dropdown">Select Expansion</button>
 				<div id="expansionDropdownMenu" class="dropdown-menu">
 					<div class="dropdown-header">Generation 1 Expansions</div>
 					<div class="dropdown-divider"></div>
-					<button class="dropdown-item" type="button" onclick='writeDataToDOM("setDataOut", getSetData("base1"));toggleActive(this);'>Base Set</button>
+					<button class="dropdown-item" type="button" onclick='writeDataToDOM("setDataOut", getSetData("np"));toggleActive(this);'>Base Set</button>
 					<button class="dropdown-item" type="button" onclick='writeDataToDOM("setDataOut", getSetData("base2"));toggleActive(this);'>Jungle</button>
 					<button class="dropdown-item" type="button" onclick='writeDataToDOM("setDataOut", getSetData("basep"));toggleActive(this);'>Wizards Promos</button>
 					<button class="dropdown-item" type="button" onclick='writeDataToDOM("setDataOut", getSetData("base3"));toggleActive(this);'>Fossil</button>
@@ -195,7 +203,7 @@
 				<tbody id="allKeyOut"></tbody>
 			</table>
 		</div>
-	</div>
+	</section>
 </body>
 
 </html>
