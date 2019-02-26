@@ -20,10 +20,10 @@ function sortObjectByValueNumber(object) { // Takes object and returns object so
 } // Takes object and returns object sorted by value numerically 
 
 function objectToMarkup(object, makeCols) { // Takes object and returns string of li tags 
-        var bigCol= "";
-        var smallCol = "";
+    var bigCol = "";
+    var smallCol = "";
     if (makeCols === true) {
-        bigCol= "class='col-9'";
+        bigCol = "class='col-9'";
         smallCol = "class='col-3'";
     }
     var output = "";
@@ -66,15 +66,15 @@ function getSetData(key) { // Takes set name string "key" and returns object of 
     var splitdate = jsonData.sets[key].releaseDate.split("/");
     $("#expansionDropdown")[0].innerHTML = trueName;
     return {
-        "Set Name" : trueName,
-        "Total Cards" : jsonData.sets[key].totalCards,
-        "Series Name" : jsonData.sets[key].series,
-        "Release Date" : splitdate[1] + "/" + splitdate[0] + "/" + splitdate[2],
-        "Standard Legal" : jsonData.sets[key].standardLegal,
-        "Expanded Legal" : jsonData.sets[key].expandedLegal,
-        "Artists" : "<table class='subTable'><tbody class='container'>" + objectToMarkup(sortObjectByValueNumber(getAllFromSet("artist", jsonData.sets[key].cards)), true) + "</tbody></table>",
-        "Card Names" : "<table class='subTable'><tbody class='container'>" + objectToMarkup(getAllFromSet("name", jsonData.sets[key].cards), true) + "</tbody></table>",
-        "Pokedex Number" : "<table class='subTable'><tbody class='container'>" + objectToMarkup(getAllFromSet("nationalPokedexNumber", jsonData.sets[key].cards), true) + "</tbody></table>",
+        "Set Name": trueName,
+        "Total Cards": jsonData.sets[key].totalCards,
+        "Series Name": jsonData.sets[key].series,
+        "Release Date": splitdate[1] + "/" + splitdate[0] + "/" + splitdate[2],
+        "Standard Legal": jsonData.sets[key].standardLegal,
+        "Expanded Legal": jsonData.sets[key].expandedLegal,
+        "Artists": "<table class='subTable'><tbody class='container'>" + objectToMarkup(sortObjectByValueNumber(getAllFromSet("artist", jsonData.sets[key].cards)), true) + "</tbody></table>",
+        "Card Names": "<table class='subTable'><tbody class='container'>" + objectToMarkup(getAllFromSet("name", jsonData.sets[key].cards), true) + "</tbody></table>",
+        "Pokedex Number": "<table class='subTable'><tbody class='container'>" + objectToMarkup(getAllFromSet("nationalPokedexNumber", jsonData.sets[key].cards), true) + "</tbody></table>",
     };
 } // Takes set name string "key" and returns object of data of set
 
@@ -113,6 +113,9 @@ function getAllOfKey(key) { // Takes string "key" and gets all keys in jsonData 
         }
     }
     delete allKeys[undefined];
+    var trueName = key.replace( /([A-Z])/g, " $1" );
+    trueName = trueName.charAt(0).toUpperCase() + trueName.slice(1)
+    $("#totalDropdown")[0].innerHTML = trueName;
     return sortObjectByValueNumber(allKeys);
 } // Takes key name string "key"and returns object with all keys in jsonData with name "key"
 
@@ -128,3 +131,18 @@ function getAllFromSet(key, set) { // Takes key name string "key" and set name o
     }
     return allKeys;
 } // Takes key name string "key" and set name object property "set" and returns object with all keys in "set" with name "key"
+
+function resetPage() {
+    if ($('#graphs').attr("hidden") === "hidden") {
+        $('#setDataOut').empty();
+        $('#allKeyOut').empty();
+        $('#expansionDropdown')[0].innerText = "Select Expansion";
+        $('#totalDropdown')[0].innerText = "Select Data Type";
+        $(".dropdown-item").attr("class", "dropdown-item");
+    }
+    else {
+        dc.refocusAll();
+        $('#text').attr('hidden', true);
+        $('#graphs').attr('hidden', false);
+    };
+};
