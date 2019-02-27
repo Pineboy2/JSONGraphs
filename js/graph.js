@@ -71,9 +71,6 @@ function showArtistsPerSet(ndx, cardData) {
                 else if (elem.artist == "Midori Harada") {
                     p.mHarada++;
                 }
-                else if (elem.artist == "Keiji Kinebuchi") {
-                    p.kKinebuchi++;
-                }
                 else {
                     p.other++;
                 }
@@ -110,9 +107,6 @@ function showArtistsPerSet(ndx, cardData) {
                 else if (elem.artist == "Midori Harada") {
                     p.mHarada--;
                 }
-                else if (elem.artist == "Keiji Kinebuchi") {
-                    p.kKinebuchi--;
-                }
                 else {
                     p.other--;
                 }
@@ -120,7 +114,7 @@ function showArtistsPerSet(ndx, cardData) {
             return p;
         },
         function initialise() {
-            return { total: 0, kSugimori: 0, fBan: 0, mArita: 0, kHimeno: 0, kSaitou: 0, rUeda: 0, mFukuda: 0, aNishida: 0, mHarada: 0, kKinebuchi: 0, other: 0 };
+            return { total: 0, kSugimori: 0, fBan: 0, mArita: 0, kHimeno: 0, kSaitou: 0, rUeda: 0, mFukuda: 0, aNishida: 0, mHarada: 0, other: 0 };
         }
     );
     dc.barChart("#ArtistStack")
@@ -154,9 +148,6 @@ function showArtistsPerSet(ndx, cardData) {
         .stack(artistsGroup, "Midori Harada", function(d) {
             return d.value.mHarada
         })
-        //.stack(artistsGroup, "Keiji Kinebuchi", function(d) {
-        //    return d.value.kKinebuchi
-        //})
         .stack(artistsGroup, "Other", function(d) {
             return d.value.other
         })
