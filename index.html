@@ -21,8 +21,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.0.9/dc.min.js" integrity="sha384-apM9RQQo07ma6HxoIAy9RZQyaDS64A0dXF1zUKzYnK67ysa6cA/A/KzNpM+PFbHs" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js" integrity="sha384-+OcaADqsJ9aPHe0bxE/y8GaaW0mTCnRuqo/QY6s16/MKpX9EPIYnY9fSnBKntdr5" crossorigin="anonymous"></script>
 
-	<script type="text/javascript" src="js/main.js"></script>
-	<script type="text/javascript" src="js/graph.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/graph.js"></script>
 </head>
 
 <body>
@@ -36,24 +36,24 @@
 	</div>
 	<nav class="navbar navbar-dark bg-dark">
 		<span class="navbar-brand">Pokemon TCG Data Dashboard</span>
-		<button class="btn btn-dark" onclick="$('#text').attr('hidden', true);$('#graphs').attr('hidden', false)">Graph Viewer</a>
-		<button class="btn btn-dark" onclick="$('#text').attr('hidden', false);$('#graphs').attr('hidden', true)">Text Viewer</a>
-		<button class="btn btn-dark" onclick="resetPage()">Reset All</a>
+		<button class="btn btn-dark" onclick="$('#text').attr('hidden', true);$('#graphs').attr('hidden', false)">Graph Viewer</button>
+		<button class="btn btn-dark" onclick="$('#text').attr('hidden', false);$('#graphs').attr('hidden', true)">Text Viewer</button>
+		<button class="btn btn-dark" onclick="resetPage()">Reset All</button>
 	</nav>
-	<section id="graphs"class="container-fluid">
+	<section id="graphs" class="container-fluid">
 		<h1 class="text-center">Graph Viewer</h1>
 		<div class="row">
 			<h2 class="col-4">Number of cards per set</h2>
 			<h2 class="col-4">Types of cards</h2>
-			<h2 class="col-4">&nbsp</h2>
-			<div id="CardsPerSet" class="col-4 diagonalX">&nbsp</div>
-			<div id="CardTypes" class="col-4">&nbsp</div>
+			<h2 class="col-4">&nbsp;</h2>
+			<div id="CardsPerSet" class="col-4 diagonalX">&nbsp;</div>
+			<div id="CardTypes" class="col-4">&nbsp;</div>
 		</div>
 		<div class="row">
 			<h2 class="col-4">Number of artists in each set</h2>
-			<h2 class="col-4">&nbsp</h2>
-			<h2 class="col-4">&nbsp</h2>
-			<div id="ArtistStack" class="col-4 diagonalX">&nbsp</div>
+			<h2 class="col-4">&nbsp;</h2>
+			<h2 class="col-4">&nbsp;</h2>
+			<div id="ArtistStack" class="col-4 diagonalX">&nbsp;</div>
 		</div>
 	</section>
 	<section id="text" class="container-fluid" hidden>
@@ -101,11 +101,11 @@
 			</div>
 		</div>
 		<div id="tableRow" class="row">
-			<table class="col">
+			<table class="col-6">
 				<tbody id="setDataOut">
 				</tbody>
 			</table>
-			<table class="col">
+			<table class="col-6">
 				<tbody id="allKeyOut"></tbody>
 			</table>
 		</div>
