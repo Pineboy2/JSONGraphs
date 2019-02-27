@@ -38,7 +38,7 @@ function showCardsPerSet(ndx, cardData) {
         .group(group)
         .ordering(function(d){
             var dateArray = cardData.sets[d.key].releaseDate.split("/");
-            return parseInt(dateArray[2]+dateArray[0]+dateArray[1]);
+            return parseInt(dateArray[2]+dateArray[0]+dateArray[1], 10);
         });
 }
 
@@ -78,7 +78,7 @@ function showArtistsPerSet(ndx, cardData) {
                 else {
                     p.other++;
                 }
-            })
+            });
             return p;
         },
         function remove(p, v) {
@@ -114,7 +114,7 @@ function showArtistsPerSet(ndx, cardData) {
                 else {
                     p.other--;
                 }
-            })
+            });
             return p;
         },
         function initialise() {
@@ -129,31 +129,31 @@ function showArtistsPerSet(ndx, cardData) {
             return cardData.sets[d.key].name;
         })
         .stack(artistsGroup, "5ban Graphics", function(d) {
-            return d.value.fBan
+            return d.value.fBan;
         })
         .stack(artistsGroup, "Mitsuhiro Arita", function(d) {
-            return d.value.mArita
+            return d.value.mArita;
         })
         .stack(artistsGroup, "Kagemaru Himeno", function(d) {
-            return d.value.kHimeno
+            return d.value.kHimeno;
         })
         .stack(artistsGroup, "Kouki Saitou", function(d) {
-            return d.value.kSaitou
+            return d.value.kSaitou;
         })
         .stack(artistsGroup, "Ryo Ueda", function(d) {
-            return d.value.rUeda
+            return d.value.rUeda;
         })
         .stack(artistsGroup, "Masakazu Fukuda", function(d) {
-            return d.value.mFukuda
+            return d.value.mFukuda;
         })
         .stack(artistsGroup, "Atsuko Nishida", function(d) {
-            return d.value.aNishida
+            return d.value.aNishida;
         })
         .stack(artistsGroup, "Midori Harada", function(d) {
-            return d.value.mHarada
+            return d.value.mHarada;
         })
         .stack(artistsGroup, "Other", function(d) {
-            return d.value.other
+            return d.value.other;
         })
         .height(500)
         .margins({ top: 10, right: 50, bottom: 100, left: 30 })
@@ -162,7 +162,7 @@ function showArtistsPerSet(ndx, cardData) {
         .legend(dc.legend().x(500).y(10).itemHeight(13).gap(5))
         .ordering(function(d){
             var dateArray = cardData.sets[d.key].releaseDate.split("/");
-            return parseInt(dateArray[2]+dateArray[0]+dateArray[1]);
+            return parseInt(dateArray[2]+dateArray[0]+dateArray[1], 10);
         });
 }
 
@@ -212,8 +212,8 @@ function showAllTypes(ndx, cardData) {
                         default:
                             p.other++;
                     }
-                })
-            })
+                });
+            });
             return p;
         },
         function remove(p, v) {
@@ -257,8 +257,8 @@ function showAllTypes(ndx, cardData) {
                         default:
                             p.other--;
                     }
-                })
-            })
+                });
+            });
             return p;
         },
         function initialise() {
@@ -271,5 +271,5 @@ function showAllTypes(ndx, cardData) {
         .valueAccessor(function(d) { return d.value.water; })
         .height(500)
         .width(500)
-        .legend(dc.legend())
+        .legend(dc.legend());
 }

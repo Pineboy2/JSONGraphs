@@ -12,14 +12,14 @@ $(document).ready(function() { // On page load gets the JSON data from ./static/
 }); // On page load gets the JSON data from ./static/js/cards.json and hide loading screen
 
 function getExpansionData(code) { // Takes string "code" and returns object with data of sets with code "code"
-    var expansion = {}
+    var expansion = {};
     var dateArray = jsonData.sets[code].releaseDate.split("/");
-    expansion.releaseDate = parseInt(dateArray[2] + dateArray[0] + dateArray[1])
-    expansion.series = jsonData.sets[code].series
-    expansion.name = jsonData.sets[code].name
-    expansion.code = jsonData.sets[code].code
+    expansion.releaseDate = parseInt(dateArray[2] + dateArray[0] + dateArray[1], 10);
+    expansion.series = jsonData.sets[code].series;
+    expansion.name = jsonData.sets[code].name;
+    expansion.code = jsonData.sets[code].code;
     return expansion;
-}; // Takes string "code" and returns object with data of sets with code "code"
+} // Takes string "code" and returns object with data of sets with code "code"
 
 function populateDropdown() { // Populates #expansionDropdown with buttons
     var gens = {};
@@ -40,33 +40,33 @@ function populateDropdown() { // Populates #expansionDropdown with buttons
         total++;
         var expansion = getExpansionData(key);
         if (expansion.series == "POP") {
-            gens.pop.push(expansion)
+            gens.pop.push(expansion);
         }
         else if (expansion.releaseDate < 20001216) {
-            gens.gen1.push(expansion)
+            gens.gen1.push(expansion);
         }
         else if (expansion.releaseDate < 20030701) {
-            gens.gen2.push(expansion)
+            gens.gen2.push(expansion);
         }
         else if (expansion.releaseDate < 20070501) {
             if (expansion.name != "Nintendo Black Star Promos") {
-                gens.gen3.push(expansion)
+                gens.gen3.push(expansion);
             }
             else {
-                gens.gen3.push(expansion)
+                gens.gen3.push(expansion);
             }
         }
         else if (expansion.releaseDate < 20110301) {
-            gens.gen4.push(expansion)
+            gens.gen4.push(expansion);
         }
         else if (expansion.releaseDate < 20131012 || expansion.code === "bw11") {
-            gens.gen5.push(expansion)
+            gens.gen5.push(expansion);
         }
         else if (expansion.releaseDate < 20170203) {
-            gens.gen6.push(expansion)
+            gens.gen6.push(expansion);
         }
         else {
-            gens.gen7.push(expansion)
+            gens.gen7.push(expansion);
         }
     }
     for (var key in gens) {
@@ -75,7 +75,7 @@ function populateDropdown() { // Populates #expansionDropdown with buttons
         }).forEach(function(elem) {
             $("#"+key).before(createButton(elem.code, elem.name));
     })}
-    $("#pop").after('<div class="dropdown-header">Total Expansions: ' + total + '</div>')
+    $("#pop").after('<div class="dropdown-header">Total Expansions: ' + total + '</div>');
 } // Populates #expansionDropdown with buttons
 
 function sortObjectByValueNumber(object) { // Takes object and returns object sorted by value numerically 
@@ -217,5 +217,5 @@ function resetPage() {
         dc.refocusAll();
         $('#text').attr('hidden', true);
         $('#graphs').attr('hidden', false);
-    };
-};
+    }
+}
