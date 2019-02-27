@@ -15,10 +15,10 @@ function makeGraphs(cardData) {
 
     showCardsPerSet(ndx, cardData);
     showArtistsPerSet(ndx, cardData);
+    showAllTypes(ndx, cardData);
 
     dc.renderAll();
 }
-
 
 function showCardsPerSet(ndx, cardData) {
     var dim = ndx.dimension(dc.pluck("code"));
@@ -43,40 +43,84 @@ function showArtistsPerSet(ndx, cardData) {
     var artistsGroup = dim.group().reduce(
         function add(p, v) {
             p.total++;
-            v.cards.forEach(function(elem){
+            v.cards.forEach(function(elem) {
                 if (elem.artist == "Ken Sugimori") {
                     p.kSugimori++;
-                } else if (elem.artist == "5ban Graphics") {
+                }
+                else if (elem.artist == "5ban Graphics") {
                     p.fBan++;
-                } else if (elem.artist == "Mitsuhiro Arita") {
+                }
+                else if (elem.artist == "Mitsuhiro Arita") {
                     p.mArita++;
-                } else if (elem.artist == "Kagemaru Himeno") {
+                }
+                else if (elem.artist == "Kagemaru Himeno") {
                     p.kHimeno++;
-                } else if (elem.artist == "Kouki Saitou") {
+                }
+                else if (elem.artist == "Kouki Saitou") {
                     p.kSaitou++;
+                }
+                else if (elem.artist == "Ryo Ueda") {
+                    p.rUeda++;
+                }
+                else if (elem.artist == "Masakazu Fukuda") {
+                    p.mFukuda++;
+                }
+                else if (elem.artist == "Atsuko Nishida") {
+                    p.aNishida++;
+                }
+                else if (elem.artist == "Midori Harada") {
+                    p.mHarada++;
+                }
+                else if (elem.artist == "Keiji Kinebuchi") {
+                    p.kKinebuchi++;
+                }
+                else {
+                    p.other++;
                 }
             })
             return p;
         },
         function remove(p, v) {
             p.total--;
-            v.cards.forEach(function(elem){
+            v.cards.forEach(function(elem) {
                 if (elem.artist == "Ken Sugimori") {
                     p.kSugimori--;
-                } else if (elem.artist == "5ban Graphics") {
+                }
+                else if (elem.artist == "5ban Graphics") {
                     p.fBan--;
-                } else if (elem.artist == "Mitsuhiro Arita") {
+                }
+                else if (elem.artist == "Mitsuhiro Arita") {
                     p.mArita--;
-                } else if (elem.artist == "Kagemaru Himeno") {
+                }
+                else if (elem.artist == "Kagemaru Himeno") {
                     p.kHimeno--;
-                } else if (elem.artist == "Kouki Saitou") {
+                }
+                else if (elem.artist == "Kouki Saitou") {
                     p.kSaitou--;
+                }
+                else if (elem.artist == "Ryo Ueda") {
+                    p.rUeda--;
+                }
+                else if (elem.artist == "Masakazu Fukuda") {
+                    p.mFukuda--;
+                }
+                else if (elem.artist == "Atsuko Nishida") {
+                    p.aNishida--;
+                }
+                else if (elem.artist == "Midori Harada") {
+                    p.mHarada--;
+                }
+                else if (elem.artist == "Keiji Kinebuchi") {
+                    p.kKinebuchi--;
+                }
+                else {
+                    p.other--;
                 }
             })
             return p;
         },
         function initialise() {
-            return { total: 0, kSugimori: 0, fBan: 0, mArita:0, kHimeno:0, kSaitou:0 };
+            return { total: 0, kSugimori: 0, fBan: 0, mArita: 0, kHimeno: 0, kSaitou: 0, rUeda: 0, mFukuda: 0, aNishida: 0, mHarada: 0, kKinebuchi: 0, other: 0 };
         }
     );
     dc.barChart("#ArtistStack")
@@ -98,22 +142,135 @@ function showArtistsPerSet(ndx, cardData) {
         .stack(artistsGroup, "Kouki Saitou", function(d) {
             return d.value.kSaitou
         })
+        .stack(artistsGroup, "Ryo Ueda", function(d) {
+            return d.value.rUeda
+        })
+        .stack(artistsGroup, "Masakazu Fukuda", function(d) {
+            return d.value.mFukuda
+        })
+        .stack(artistsGroup, "Atsuko Nishida", function(d) {
+            return d.value.aNishida
+        })
+        .stack(artistsGroup, "Midori Harada", function(d) {
+            return d.value.mHarada
+        })
+        //.stack(artistsGroup, "Keiji Kinebuchi", function(d) {
+        //    return d.value.kKinebuchi
+        //})
+        .stack(artistsGroup, "Other", function(d) {
+            return d.value.other
+        })
         .height(500)
         .margins({ top: 10, right: 50, bottom: 100, left: 30 })
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
-        .legend(dc.legend().x(100).y(10).itemHeight(13).gap(5));
+        .legend(dc.legend().x(500).y(10).itemHeight(13).gap(5));
 }
 
-function getAllFromSet(key, set) { // Takes key name string "key" and set name object property "set" and returns all keys in "set" with name "key"
-    var allKeys = {};
-    for (var card in set) {
-        if (set[card][key] in allKeys) {
-            allKeys[set[card][key]] += 1;
-        }
-        else {
-            allKeys[set[card][key]] = 1;
-        }
-    }
-    return allKeys;
+function showAllTypes(ndx, cardData) {
+    var dim = ndx.dimension(function(d) {
+        return d.cards.map(x => x.types);
+    });
+    var typesGroup = dim.group().reduce(
+        function add(p, v) {
+            p.total++;
+            $.each(cardData.sets, function(key, value) {
+                $.each(value.cards, function(key, value) {
+                    switch (value.types) {
+                        case 'Water':
+                            p.water++;
+                            break;
+                        case 'Grass':
+                            p.grass++;
+                            break;
+                        case 'Colorless':
+                            p.colorless++;
+                            break;
+                        case 'Psychic':
+                            p.psychic++;
+                            break;
+                        case 'Fighting':
+                            p.fighting++;
+                            break;
+                        case 'Fire':
+                            p.fire++;
+                            break;
+                        case 'Lightning':
+                            p.lightning++;
+                            break;
+                        case 'Darkness':
+                            p.darkness++;
+                            break;
+                        case 'Metal':
+                            p.metal++;
+                            break;
+                        case 'Dragon':
+                            p.dragon++;
+                            break;
+                        case 'Fairy':
+                            p.fairy++;
+                            break;
+                        default:
+                            p.other++;
+                    }
+                })
+            })
+            return p;
+        },
+        function remove(p, v) {
+            p.total--;
+            $.each(cardData.sets, function(key, value) {
+                $.each(value.cards, function(ckey, cvalue) {
+                    switch (cvalue.types) {
+                        case 'Water':
+                            p.water--;
+                            break;
+                        case 'Grass':
+                            p.grass--;
+                            break;
+                        case 'Colorless':
+                            p.colorless--;
+                            break;
+                        case 'Psychic':
+                            p.psychic--;
+                            break;
+                        case 'Fighting':
+                            p.fighting--;
+                            break;
+                        case 'Fire':
+                            p.fire--;
+                            break;
+                        case 'Lightning':
+                            p.lightning--;
+                            break;
+                        case 'Darkness':
+                            p.darkness--;
+                            break;
+                        case 'Metal':
+                            p.metal--;
+                            break;
+                        case 'Dragon':
+                            p.dragon--;
+                            break;
+                        case 'Fairy':
+                            p.fairy--;
+                            break;
+                        default:
+                            p.other--;
+                    }
+                })
+            })
+            return p;
+        },
+        function initialise() {
+            return { total: 0, water: 0, grass: 0, colorless: 0, psychic: 0, fighting: 0, fire: 0, lightning: 0, darkness: 0, metal: 0, dragon: 0, fairy: 0, other: 0 };
+        },
+    );
+    dc.pieChart("#CardTypes")
+        .dimension(dim)
+        .group(typesGroup, "Water")
+        .valueAccessor(function(d) { return d.value.water; })
+        .height(500)
+        .width(500)
+        .legend(dc.legend())
 }
