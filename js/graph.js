@@ -35,7 +35,11 @@ function showCardsPerSet(ndx, cardData) {
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
         .dimension(dim)
-        .group(group);
+        .group(group)
+        .ordering(function(d){
+            var dateArray = cardData.sets[d.key].releaseDate.split("/");
+            return parseInt(dateArray[2]+dateArray[0]+dateArray[1]);
+        });
 }
 
 function showArtistsPerSet(ndx, cardData) {
@@ -155,7 +159,11 @@ function showArtistsPerSet(ndx, cardData) {
         .margins({ top: 10, right: 50, bottom: 100, left: 30 })
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
-        .legend(dc.legend().x(500).y(10).itemHeight(13).gap(5));
+        .legend(dc.legend().x(500).y(10).itemHeight(13).gap(5))
+        .ordering(function(d){
+            var dateArray = cardData.sets[d.key].releaseDate.split("/");
+            return parseInt(dateArray[2]+dateArray[0]+dateArray[1]);
+        });
 }
 
 function showAllTypes(ndx, cardData) {
