@@ -29,7 +29,7 @@ function objectToMarkup(object, makeCols) { // Takes object and returns string o
     var output = "";
     for (var i in object) {
         if (i === "") {
-            output += "<tr class='dataCols text-danger'><td " + bigCol + ">JSON WAS BLANK</td><td " + smallCol + ">" + object[i] + "</td></tr>";
+            output += "<tr class='dataCols'><td " + bigCol + "><em class='text-muted'>none</em></td><td " + smallCol + ">" + object[i] + "</td></tr>";
         }
         else {
             output += "<tr class='dataCols'><td " + bigCol + ">" + i + "</td><td " + smallCol + ">" + object[i] + "</td></tr>";
@@ -113,8 +113,12 @@ function getAllOfKey(key) { // Takes string "key" and gets all keys in jsonData 
         }
     }
     delete allKeys[undefined];
-    var trueName = key.replace( /([A-Z])/g, " $1" );
-    trueName = trueName.charAt(0).toUpperCase() + trueName.slice(1)
+    if (key === "hp") {
+        var trueName = "HP";
+    } else {
+        var trueName = key.replace( /([A-Z])/g, " $1" );
+        trueName = trueName.charAt(0).toUpperCase() + trueName.slice(1);
+    }
     $("#totalDropdown")[0].innerHTML = trueName;
     return sortObjectByValueNumber(allKeys);
 } // Takes key name string "key"and returns object with all keys in jsonData with name "key"
