@@ -20,7 +20,7 @@ function makeGraphs(cardData) {
         }
     }
     cdx = crossfilter(cdx);
-    showCardsPerSet(ndx, cardData);
+    showCardsPerSet(ndx);
     showArtistsPerSet(ndx, cardData);
     showRarityPerSet(ndx, cardData);
     showAllTypes(cdx);
@@ -28,16 +28,18 @@ function makeGraphs(cardData) {
     dc.renderAll();
 }
 
-function showCardsPerSet(ndx, cardData) {
-    var dim = ndx.dimension(dc.pluck("code"));
+function showCardsPerSet(ndx) {
+    var dim = ndx.dimension(function(d) {
+        return [d.name, d.cards.length, d.releaseDate];
+    });
     var group = dim.group();
     dc.barChart("#CardsPerSet")
         .keyAccessor(function(d) {
-            return cardData.sets[d.key].name;
+            return d.key[0];
         })
         .valueAccessor(function(d) {
-            return cardData.sets[d.key].cards.length;
-        })
+            return d.key[1];
+        }) 
         .margins({ top: 10, right: 50, bottom: 100, left: 30 })
         .height(500)
         .x(d3.scaleBand())
@@ -45,7 +47,7 @@ function showCardsPerSet(ndx, cardData) {
         .dimension(dim)
         .group(group)
         .ordering(function(d) {
-            var dateArray = cardData.sets[d.key].releaseDate.split("/");
+            var dateArray = d.key[2].split("/");
             return parseInt(dateArray[2] + dateArray[0] + dateArray[1], 10);
         });
 }
@@ -129,7 +131,7 @@ function showArtistsPerSet(ndx, cardData) {
             return { total: 0, kSugimori: 0, fBan: 0, mArita: 0, kHimeno: 0, kSaitou: 0, rUeda: 0, mFukuda: 0, aNishida: 0, mHarada: 0, other: 0 };
         }
     );
-    dc.barChart("#ArtistStack")
+    var artistStack = dc.barChart("#ArtistStack")
         .dimension(dim)
         .group(artistsGroup, "Ken Sugimori")
         .valueAccessor(function(d) { return d.value.kSugimori; })
@@ -193,16 +195,16 @@ function showRarityPerSet(ndx, cardData) {
                     p.rareHolo++;
                 }
                 else if (elem.rarity == "Rare Holo EX" || elem.rarity == "Rare Holo GX" || elem.rarity == "Rare Holo Lv.X") {
-                    p.rareHoloX--;
+                    p.rareHoloX++;
                 }
                 else if (elem.rarity == "Rare Ultra") {
-                    p.rareUltra--;
+                    p.rareUltra++;
                 }
                 else if (elem.rarity == "Rare BREAK") {
-                    p.rareBREAK--;
+                    p.rareBREAK++;
                 }
                 else if (elem.rarity == "Rare Prime") {
-                    p.rarePrime--;
+                    p.rarePrime++;
                 }
                 else if (elem.set.includes("Promo")) {
                     p.promo++;
@@ -317,7 +319,7 @@ function showAllTypes(cdx, cardData) {
         .group(typesGroup)
         .height("400")
         .radius("150")
-        .innerRadius("50")
+        .innerRadius("75")
         .colorAccessor(function(d) { return d.key[0]; })
         .colors(typeColors)
         .legend(dc.legend().horizontal(true).legendWidth("320"));
@@ -331,7 +333,7 @@ function showSupertypes(cdx, cardData) {
         .group(typesGroup)
         .height("400")
         .radius("150")
-        .innerRadius("100")
-        .colors(d3.scaleOrdinal().range(['red','green','blue']))
+        .innerRadius("75")
+        .colors(d3.scaleOrdinal().range(['red', 'green', 'blue']))
         .legend(dc.legend().horizontal(true).legendWidth("320"));
 }
