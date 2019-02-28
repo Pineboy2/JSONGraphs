@@ -23,8 +23,8 @@ function makeGraphs(cardData) {
     showCardsPerSet(ndx, cardData);
     showArtistsPerSet(ndx, cardData);
     showRarityPerSet(ndx, cardData);
-    showAllTypes(cdx, cardData);
-
+    showAllTypes(cdx);
+    showSupertypes(cdx)
     dc.renderAll();
 }
 
@@ -167,7 +167,7 @@ function showArtistsPerSet(ndx, cardData) {
         .margins({ top: 10, right: 50, bottom: 100, left: 30 })
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
-        .legend(dc.legend().x(500).y(10).itemHeight(13).gap(5))
+        .legend(dc.legend().horizontal(true).itemWidth(110).x("50"))
         .ordering(function(d) {
             var dateArray = cardData.sets[d.key].releaseDate.split("/");
             return parseInt(dateArray[2] + dateArray[0] + dateArray[1], 10);
@@ -291,7 +291,7 @@ function showRarityPerSet(ndx, cardData) {
         .margins({ top: 10, right: 50, bottom: 100, left: 30 })
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
-        .legend(dc.legend().x(500).y(10).itemHeight(13).gap(5))
+        .legend(dc.legend().horizontal(true).itemWidth(95).x("50"))
         .ordering(function(d) {
             var dateArray = cardData.sets[d.key].releaseDate.split("/");
             return parseInt(dateArray[2] + dateArray[0] + dateArray[1], 10);
@@ -315,9 +315,23 @@ function showAllTypes(cdx, cardData) {
     dc.pieChart("#CardTypes")
         .dimension(typesDim)
         .group(typesGroup)
-        .height(500)
-        .width(500)
+        .height("400")
+        .radius("150")
+        .innerRadius("50")
         .colorAccessor(function(d) { return d.key[0]; })
         .colors(typeColors)
-        .legend(dc.legend());
+        .legend(dc.legend().horizontal(true).legendWidth("320"));
+}
+
+function showSupertypes(cdx, cardData) {
+    var typesDim = cdx.dimension(dc.pluck("supertype"));
+    var typesGroup = typesDim.group()
+    dc.pieChart("#Supertypes")
+        .dimension(typesDim)
+        .group(typesGroup)
+        .height("400")
+        .radius("150")
+        .innerRadius("100")
+        .colors(d3.scaleOrdinal().range(['red','green','blue']))
+        .legend(dc.legend().horizontal(true).legendWidth("320"));
 }
