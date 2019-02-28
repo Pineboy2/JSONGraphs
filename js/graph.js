@@ -7,15 +7,23 @@ $.when(
 });
 
 function makeGraphs(cardData) {
-    var ndx = [];
+    var ndx = []; // Full Sets
     for (var set in cardData.sets) {
         ndx.push(cardData.sets[set]);
     }
     ndx = crossfilter(ndx);
+    var cdx = []; // Individual Cards
+    for (var set in cardData.sets) {
+        for (var card in cardData.sets[set].cards) {
+            cdx.push(cardData.sets[set].cards[card]);
 
+        }
+    }
+    cdx = crossfilter(cdx);
     showCardsPerSet(ndx, cardData);
     showArtistsPerSet(ndx, cardData);
-    showAllTypes(ndx, cardData);
+    showRarityPerSet(ndx, cardData);
+    showAllTypes(cdx, cardData);
 
     dc.renderAll();
 }
@@ -36,9 +44,9 @@ function showCardsPerSet(ndx, cardData) {
         .xUnits(dc.units.ordinal)
         .dimension(dim)
         .group(group)
-        .ordering(function(d){
+        .ordering(function(d) {
             var dateArray = cardData.sets[d.key].releaseDate.split("/");
-            return parseInt(dateArray[2]+dateArray[0]+dateArray[1], 10);
+            return parseInt(dateArray[2] + dateArray[0] + dateArray[1], 10);
         });
 }
 
@@ -160,116 +168,156 @@ function showArtistsPerSet(ndx, cardData) {
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
         .legend(dc.legend().x(500).y(10).itemHeight(13).gap(5))
-        .ordering(function(d){
+        .ordering(function(d) {
             var dateArray = cardData.sets[d.key].releaseDate.split("/");
-            return parseInt(dateArray[2]+dateArray[0]+dateArray[1], 10);
+            return parseInt(dateArray[2] + dateArray[0] + dateArray[1], 10);
         });
 }
 
-function showAllTypes(ndx, cardData) {
-    var dim = ndx.dimension(function(d) {
-        return d.cards.map(x => x.types);
-    });
-    var typesGroup = dim.group().reduce(
+function showRarityPerSet(ndx, cardData) {
+    var dim = ndx.dimension(dc.pluck("code"));
+    var artistsGroup = dim.group().reduce(
         function add(p, v) {
             p.total++;
-            $.each(cardData.sets, function(key, value) {
-                $.each(value.cards, function(key, value) {
-                    switch (value.types) {
-                        case 'Water':
-                            p.water++;
-                            break;
-                        case 'Grass':
-                            p.grass++;
-                            break;
-                        case 'Colorless':
-                            p.colorless++;
-                            break;
-                        case 'Psychic':
-                            p.psychic++;
-                            break;
-                        case 'Fighting':
-                            p.fighting++;
-                            break;
-                        case 'Fire':
-                            p.fire++;
-                            break;
-                        case 'Lightning':
-                            p.lightning++;
-                            break;
-                        case 'Darkness':
-                            p.darkness++;
-                            break;
-                        case 'Metal':
-                            p.metal++;
-                            break;
-                        case 'Dragon':
-                            p.dragon++;
-                            break;
-                        case 'Fairy':
-                            p.fairy++;
-                            break;
-                        default:
-                            p.other++;
-                    }
-                });
+            v.cards.forEach(function(elem) {
+                if (elem.rarity == "Common") {
+                    p.common++;
+                }
+                else if (elem.rarity == "Uncommon") {
+                    p.uncommon++;
+                }
+                else if (elem.rarity == "Rare") {
+                    p.rare++;
+                }
+                else if (elem.rarity == "Rare Holo") {
+                    p.rareHolo++;
+                }
+                else if (elem.rarity == "Rare Holo EX" || elem.rarity == "Rare Holo GX" || elem.rarity == "Rare Holo Lv.X") {
+                    p.rareHoloX--;
+                }
+                else if (elem.rarity == "Rare Ultra") {
+                    p.rareUltra--;
+                }
+                else if (elem.rarity == "Rare BREAK") {
+                    p.rareBREAK--;
+                }
+                else if (elem.rarity == "Rare Prime") {
+                    p.rarePrime--;
+                }
+                else if (elem.set.includes("Promo")) {
+                    p.promo++;
+                }
+                else {
+                    p.other++;
+                }
             });
             return p;
         },
         function remove(p, v) {
             p.total--;
-            $.each(cardData.sets, function(key, value) {
-                $.each(value.cards, function(ckey, cvalue) {
-                    switch (cvalue.types) {
-                        case 'Water':
-                            p.water--;
-                            break;
-                        case 'Grass':
-                            p.grass--;
-                            break;
-                        case 'Colorless':
-                            p.colorless--;
-                            break;
-                        case 'Psychic':
-                            p.psychic--;
-                            break;
-                        case 'Fighting':
-                            p.fighting--;
-                            break;
-                        case 'Fire':
-                            p.fire--;
-                            break;
-                        case 'Lightning':
-                            p.lightning--;
-                            break;
-                        case 'Darkness':
-                            p.darkness--;
-                            break;
-                        case 'Metal':
-                            p.metal--;
-                            break;
-                        case 'Dragon':
-                            p.dragon--;
-                            break;
-                        case 'Fairy':
-                            p.fairy--;
-                            break;
-                        default:
-                            p.other--;
-                    }
-                });
+            v.cards.forEach(function(elem) {
+                if (elem.artist == "Common") {
+                    p.common--;
+                }
+                else if (elem.rarity == "Uncommon") {
+                    p.uncommon--;
+                }
+                else if (elem.rarity == "Rare") {
+                    p.rare--;
+                }
+                else if (elem.rarity == "Rare Holo") {
+                    p.rareHolo--;
+                }
+                else if (elem.rarity == "Rare Holo EX" || elem.rarity == "Rare Holo GX" || elem.rarity == "Rare Holo Lv.X") {
+                    p.rareHoloX--;
+                }
+                else if (elem.rarity == "Rare Ultra") {
+                    p.rareUltra--;
+                }
+                else if (elem.rarity == "Rare BREAK") {
+                    p.rareBREAK--;
+                }
+                else if (elem.rarity == "Rare Prime") {
+                    p.rarePrime--;
+                }
+                else if (elem.set.includes("Promo")) {
+                    p.promo--;
+                }
+                else {
+                    p.other--;
+                }
             });
             return p;
         },
         function initialise() {
-            return { total: 0, water: 0, grass: 0, colorless: 0, psychic: 0, fighting: 0, fire: 0, lightning: 0, darkness: 0, metal: 0, dragon: 0, fairy: 0, other: 0 };
-        },
+            return { total: 0, common: 0, uncommon: 0, rare: 0, rareHolo: 0, rareHoloX: 0, rareUltra: 0, rareBREAK: 0, rarePrime: 0, promo: 0, other: 0 };
+        }
     );
-    dc.pieChart("#CardTypes")
+    dc.barChart("#RarityPie")
         .dimension(dim)
-        .group(typesGroup, "Water")
-        .valueAccessor(function(d) { return d.value.water; })
+        .group(artistsGroup, "Common")
+        .valueAccessor(function(d) { return d.value.common; })
+        .keyAccessor(function(d) {
+            return cardData.sets[d.key].name;
+        })
+        .stack(artistsGroup, "Uncommon", function(d) {
+            return d.value.uncommon;
+        })
+        .stack(artistsGroup, "Rare", function(d) {
+            return d.value.rare;
+        })
+        .stack(artistsGroup, "Rare Holo", function(d) {
+            return d.value.rareHolo;
+        })
+        .stack(artistsGroup, "Rare Holo ex/Lv.X/EX/GX", function(d) {
+            return d.value.rareHoloX;
+        })
+        .stack(artistsGroup, "Rare Ultra", function(d) {
+            return d.value.rareUltra;
+        })
+        .stack(artistsGroup, "Rare BREAK", function(d) {
+            return d.value.rareBREAK;
+        })
+        .stack(artistsGroup, "Rare Prime", function(d) {
+            return d.value.rarePrime;
+        })
+        .stack(artistsGroup, "Promo", function(d) {
+            return d.value.promo;
+        })
+        .stack(artistsGroup, "Other", function(d) {
+            return d.value.other;
+        })
+        .height(500)
+        .margins({ top: 10, right: 50, bottom: 100, left: 30 })
+        .x(d3.scaleBand())
+        .xUnits(dc.units.ordinal)
+        .legend(dc.legend().x(500).y(10).itemHeight(13).gap(5))
+        .ordering(function(d) {
+            var dateArray = cardData.sets[d.key].releaseDate.split("/");
+            return parseInt(dateArray[2] + dateArray[0] + dateArray[1], 10);
+        });
+}
+
+function showAllTypes(cdx, cardData) {
+    var typesDim = cdx.dimension(dc.pluck("types", function(d) {
+        if (d === undefined) { return ["None"] }
+        else if (d.length != 1) {
+            return ["Dual"]
+        }
+        else {
+            return d
+        }
+    }));
+    var typesGroup = typesDim.group()
+    var typeColors = d3.scaleOrdinal()
+        .domain(["Grass", "Fire", "Water", "Lightning", "Fighting", "Psychic", "Colorless", "Darkness", "Metal", "Dragon", "Fairy", "Dual", "None"])
+        .range(["#7DB808", "#E24242", "#5BC7E5", "#FAB536", "#FF501F", "#A65E9A", "#E5D6D0", "#2C2E2B", "#8A776E", "#C6A114", "#E03A83", "#4038F8", "#5f5f5f"])
+    dc.pieChart("#CardTypes")
+        .dimension(typesDim)
+        .group(typesGroup)
         .height(500)
         .width(500)
+        .colorAccessor(function(d) { return d.key[0]; })
+        .colors(typeColors)
         .legend(dc.legend());
 }
