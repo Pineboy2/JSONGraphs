@@ -1,34 +1,57 @@
+html{
+    height:100%;
+}
+
+#header {
+    width: 100%;
+    z-index: 9998;
+}
+
+#main {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: calc(100vh - 110px);
+}
+
+#graphs {
+    padding: 0;
+}
+
 tr:nth-child(even) {
-    background-color: #ddd;
+    background-color: #dedede;
 }
 
 tr:nth-child(odd) {
-    background-color: #eee;
+    background-color: #eeeeee;
 }
 
 tr:nth-child(even) .subTable tr:nth-child(even) {
-    background-color: #ccc;
+    background-color: #cecece;
 }
 
 tr:nth-child(even) .subTable tr:nth-child(odd) {
-    background-color: #eee;
+    background-color: #eeeeee;
 }
 
 tr:nth-child(odd) .subTable tr:nth-child(even) {
-    background-color: #ddd;
+    background-color: #dedede;
 }
 
 tr:nth-child(odd) .subTable tr:nth-child(odd) {
-    background-color: #fff;
+    background-color: #fefefe;
 }
 
 tr:nth-child(odd) .subTable td:nth-child(even) {
     text-align: right;
 }
 
+td {
+    padding: 0;
+}
+
 .dropdown-menu {
     overflow-x: hidden;
-    max-height: 90vh;
+    max-height: 75vh;
 }
 
 #expansionDropdownMenu {
@@ -92,15 +115,12 @@ ul {
     }
 }
 
-#tableRow {
-    height: 82.5vh;
-    overflow-y: scroll;
-}
-
-.subTable td{
-    padding: 0;
-}
 .diagonalX .x.axis text {
     text-anchor: end !important;
     transform: rotate(-45deg);
+}
+
+#footer{
+    padding-top: 3px;
+    padding-bottom: 3px;
 }

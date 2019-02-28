@@ -34,88 +34,98 @@
 			</ul>
 		</div>
 	</div>
-	<nav class="navbar navbar-dark bg-dark">
+	<header id="header" class="navbar navbar-dark bg-dark">
 		<span class="navbar-brand">Pokemon TCG Data Dashboard</span>
 		<button class="btn btn-dark" onclick="$('#text').attr('hidden', true);$('#graphs').attr('hidden', false)">Graph Viewer</button>
 		<button class="btn btn-dark" onclick="$('#text').attr('hidden', false);$('#graphs').attr('hidden', true)">Text Viewer</button>
 		<button class="btn btn-dark" onclick="resetPage()">Reset All</button>
-	</nav>
-	<section id="graphs" class="container-fluid">
-		<h1 class="text-center">Graph Viewer</h1>
-		<div class="row">
-			<h2 class="col-4">Number of cards per set</h2>
-			<h2 class="col-4">Types of cards</h2>
-			<h2 class="col-4">&nbsp;</h2>
-			<div id="CardsPerSet" class="col-4 diagonalX">&nbsp;</div>
-			<div id="CardTypes" class="col-4">&nbsp;</div>
-		</div>
-		<div class="row">
-			<h2 class="col-4">Number of artists in each set</h2>
-			<h2 class="col-4">&nbsp;</h2>
-			<h2 class="col-4">&nbsp;</h2>
-			<div id="ArtistStack" class="col-4 diagonalX">&nbsp;</div>
-		</div>
-		<div class="row">
-			<h2 class="col-4">Different rarity levels in each set</h2>
-			<h2 class="col-4">&nbsp;</h2>
-			<h2 class="col-4">&nbsp;</h2>
-			<div id="RarityStack" class="col-4 diagonalX">&nbsp;</div>
-		</div>
-	</section>
-	<section id="text" class="container-fluid" hidden>
-		<h1 class="text-center">Text Viewer</h1>
-		<div class="row">
-			<div class="col-6 dropdown">
-				<button class="dropdown-toggle btn btn-dark" type="button" id="expansionDropdown" data-toggle="dropdown">Select Expansion</button>
-				<div id="expansionDropdownMenu" class="dropdown-menu">
-					<div class="dropdown-header">Generation 1 Expansions</div>
-					<div class="dropdown-divider" id="gen1"></div>
-					<div class="dropdown-header">Generation 2 Expansions</div>
-					<div class="dropdown-divider" id="gen2"></div>
-					<div class="dropdown-header">Generation 3 Expansions</div>
-					<div class="dropdown-divider" id="gen3"></div>
-					<div class="dropdown-header">Generation 4 Expansions</div>
-					<div class="dropdown-divider" id="gen4"></div>
-					<div class="dropdown-header">Generation 5 Expansions</div>
-					<div class="dropdown-divider" id="gen5"></div>
-					<div class="dropdown-header">Generation 6 Expansions</div>
-					<div class="dropdown-divider" id="gen6"></div>
-					<div class="dropdown-header">Generation 7 Expansions</div>
-					<div class="dropdown-divider" id="gen7"></div>
-					<div class="dropdown-header">POP Expansions</div>
-					<div class="dropdown-divider" id="pop"></div>
+	</header>
+	<main id="main">
+		<section id="graphs" class="container-fluid">
+			<h1 class="text-center">Graph Viewer</h1>
+			<div class="row">
+				<h2 class="col-6">Number of cards per set</h2>
+				<h2 class="col-3">Types of cards</h2>
+				<h2 class="col-3">Types of pokemon cards</h2>
+				<div id="CardsPerSet" class="col-6 diagonalX">&nbsp;</div>
+				<div id="Supertypes" class="col-3">&nbsp;</div>
+				<div id="CardTypes" class="col-3">&nbsp;</div>
+			</div>
+			<div class="row">
+				<h2 class="col-6">Number of artists in each set</h2>
+				<h2 class="col-3">&nbsp;</h2>
+				<h2 class="col-3">&nbsp;</h2>
+				<div id="ArtistStack" class="col-6 diagonalX">&nbsp;</div>
+			</div>
+			<div class="row">
+				<h2 class="col-6">Different rarity levels in each set</h2>
+				<h2 class="col-3">&nbsp;</h2>
+				<h2 class="col-3">&nbsp;</h2>
+				<div id="RarityPie" class="col-6 diagonalX">&nbsp;</div>
+			</div>
+		</section>
+		<section id="text" class="container-fluid" hidden>
+			<h1 class="text-center">Text Viewer</h1>
+			<div class="row">
+				<div class="col-6 dropdown">
+					<button class="dropdown-toggle btn btn-dark" type="button" id="expansionDropdown" data-toggle="dropdown">Select Expansion</button>
+					<div id="expansionDropdownMenu" class="dropdown-menu">
+						<div class="dropdown-header">Generation 1 Expansions</div>
+						<div class="dropdown-divider" id="gen1"></div>
+						<div class="dropdown-header">Generation 2 Expansions</div>
+						<div class="dropdown-divider" id="gen2"></div>
+						<div class="dropdown-header">Generation 3 Expansions</div>
+						<div class="dropdown-divider" id="gen3"></div>
+						<div class="dropdown-header">Generation 4 Expansions</div>
+						<div class="dropdown-divider" id="gen4"></div>
+						<div class="dropdown-header">Generation 5 Expansions</div>
+						<div class="dropdown-divider" id="gen5"></div>
+						<div class="dropdown-header">Generation 6 Expansions</div>
+						<div class="dropdown-divider" id="gen6"></div>
+						<div class="dropdown-header">Generation 7 Expansions</div>
+						<div class="dropdown-divider" id="gen7"></div>
+						<div class="dropdown-header">POP Expansions</div>
+						<div class="dropdown-divider" id="pop"></div>
+					</div>
+				</div>
+				<div class="col-6 dropdown">
+					<button class="dropdown-toggle btn btn-dark" type="button" id="totalDropdown" data-toggle="dropdown">Select Data Type</button>
+					<div class="dropdown-menu">
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('artist'));">Artist</button>
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('convertedRetreatCost'));">Converted Retreat Cost</button>
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('evolvesFrom'));">Evolves From</button>
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('hp'));">HP</button>
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('level'));">Level</button>
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('name'));">Name</button>
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('nationalPokedexNumber'));">National Pokedex Number</button>
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('rarity'));">Rarity</button>
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('subtype'));">Subtype</button>
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('supertype'));">Supertype</button>
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('types'));">Types</button>
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('weaknesses'));">Weaknesses</button>
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('evolvesTo'));">Evolves To</button>
+						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('resistances'));">Resistances</button>
+					</div>
 				</div>
 			</div>
-			<div class="col-6 dropdown">
-				<button class="dropdown-toggle btn btn-dark" type="button" id="totalDropdown" data-toggle="dropdown">Select Data Type</button>
-				<div class="dropdown-menu">
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('artist'));">Artist</button>
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('convertedRetreatCost'));">Converted Retreat Cost</button>
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('evolvesFrom'));">Evolves From</button>
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('hp'));">HP</button>
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('level'));">Level</button>
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('name'));">Name</button>
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('nationalPokedexNumber'));">National Pokedex Number</button>
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('rarity'));">Rarity</button>
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('subtype'));">Subtype</button>
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('supertype'));">Supertype</button>
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('types'));">Types</button>
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('weaknesses'));">Weaknesses</button>
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('evolvesTo'));">Evolves To</button>
-					<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('resistances'));">Resistances</button>
-				</div>
+			<div id="tableRow" class="row">
+				<table class="col-6">
+					<tbody id="setDataOut">
+					</tbody>
+				</table>
+				<table class="col-6">
+					<tbody id="allKeyOut"></tbody>
+				</table>
 			</div>
-		</div>
-		<div id="tableRow" class="row">
-			<table class="col-6">
-				<tbody id="setDataOut">
-				</tbody>
-			</table>
-			<table class="col-6">
-				<tbody id="allKeyOut"></tbody>
-			</table>
-		</div>
-	</section>
+		</section>
+	</main>
+		<footer id="footer" class="container-fluid text-light bg-dark text-center">
+			<div class="row">
+				<div class="col-2">&nbsp;</div>
+				<div class="col-6">This website is not produced, endorsed, supported, or affiliated with<br> <a href="https://www.nintendo.co.uk/">Nintendo</a> or <a href="https://www.pokemon.com/uk/">The Pokémon Company</a>.</div>
+				<div class="col-2">Card data obtained from <a href="https://pokemontcg.io/">pokemontcg.io</a></div>
+			</div>
+		</footer>
 </body>
 
 </html>
