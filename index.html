@@ -36,8 +36,9 @@
 	</div>
 	<header id="header" class="navbar navbar-dark bg-dark">
 		<span class="navbar-brand">Pokemon TCG Data Dashboard</span>
-		<button class="btn btn-dark" onclick="$('#text').attr('hidden', true);$('#graphs').attr('hidden', false)">Graph Viewer</button>
-		<button class="btn btn-dark" onclick="$('#text').attr('hidden', false);$('#graphs').attr('hidden', true)">Text Viewer</button>
+		<button class="btn btn-dark" onclick="changeSection('graphs')">Graph Viewer</button>
+		<button class="btn btn-dark" onclick="changeSection('text')">Text Viewer</button>
+		<button class="btn btn-dark" onclick="changeSection('card')">Random Card Viewer</button>
 		<button class="btn btn-dark" onclick="resetPage()">Reset All</button>
 	</header>
 	<main id="main">
@@ -70,6 +71,8 @@
 				<div class="col-6 dropdown">
 					<button class="dropdown-toggle btn btn-dark" type="button" id="expansionDropdown" data-toggle="dropdown">Select Expansion</button>
 					<div id="expansionDropdownMenu" class="dropdown-menu">
+						<button class="dropdown-item" onclick='var rSet = randomSet(); writeDataToDOM("setDataOut", getSetData(rSet));toggleActive(rSet);'>Random Expansion</button>
+						<div class="dropdown-divider"></div>
 						<div class="dropdown-header">Generation 1 Expansions</div>
 						<div class="dropdown-divider" id="gen1"></div>
 						<div class="dropdown-header">Generation 2 Expansions</div>
@@ -118,14 +121,21 @@
 				</table>
 			</div>
 		</section>
+		<section id="card" class="container-fluid" hidden>
+			<h1 class="text-center">Random Card Viewer</h1>
+			<button onclick="writeDataToDOM('cardOut', randomCard(randomSet()))">Generate Card</button>
+			<table>
+				<tbody id="cardOut">&nbsp;</tbody>
+			</table>
+		</section>
 	</main>
-		<footer id="footer" class="container-fluid text-light bg-dark text-center">
-			<div class="row">
-				<div class="col-2">&nbsp;</div>
-				<div class="col-6">This website is not produced, endorsed, supported, or affiliated with<br> <a href="https://www.nintendo.co.uk/">Nintendo</a> or <a href="https://www.pokemon.com/uk/">The Pokémon Company</a>.</div>
-				<div class="col-2">Card data obtained from <a href="https://pokemontcg.io/">pokemontcg.io</a></div>
-			</div>
-		</footer>
+	<footer id="footer" class="container-fluid text-light bg-dark text-center">
+		<div class="row">
+			<small class="text-muted col-1">&nbsp;</small>
+			<small class="text-muted col-5">This website is not produced, endorsed, supported, or affiliated with<br> <a href="https://www.nintendo.co.uk/">Nintendo</a> or <a href="https://www.pokemon.com/uk/">The Pokémon Company</a>.</small>
+			<small class="text-muted col-5">Card data obtained from the pokemontcg.io<br><a href="https://pokemontcg.io/">website</a> and <a href="https://github.com/PokemonTCG/pokemon-tcg-data">repository.</a></small>
+		</div>
+	</footer>
 </body>
 
 </html>

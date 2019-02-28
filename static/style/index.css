@@ -10,11 +10,17 @@ html{
 #main {
     overflow-y: scroll;
     overflow-x: hidden;
-    height: calc(100vh - 110px);
+    height: calc(100vh - 100px);
 }
 
 #graphs {
     padding: 0;
+}
+
+#footer{
+    padding-top: 3px;
+    padding-bottom: 3px;
+    height: 44px;
 }
 
 tr:nth-child(even) {
@@ -56,6 +62,10 @@ td {
 
 #expansionDropdownMenu {
     overflow-y: scroll;
+}
+
+#expansionDropdownMenu>button {
+    cursor: pointer;
 }
 
 th {
@@ -117,10 +127,6 @@ ul {
 
 .diagonalX .x.axis text {
     text-anchor: end !important;
-    transform: rotate(-45deg);
-}
-
-#footer{
-    padding-top: 3px;
-    padding-bottom: 3px;
+    transform: rotate(-60deg) translateY(-5px) translateX(-5px);
+    font-size: 70%;
 }

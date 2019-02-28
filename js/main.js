@@ -11,6 +11,14 @@ $(document).ready(function() { // On page load gets the JSON data from ./static/
     });
 }); // On page load gets the JSON data from ./static/js/cards.json and hide loading screen
 
+function randomSet() { // Picks a random set code from array of all sets
+    return Object.keys(jsonData.sets)[Math.floor(Math.random()*Object.keys(jsonData.sets).length)];
+} // Picks a random set code from array of all sets
+
+function randomCard(set) { // Takes string "set" and returns an object of card data from set.cards 
+    return jsonData.sets[set].cards[Object.keys(jsonData.sets[set].cards)[Math.floor(Math.random()*Object.keys(jsonData.sets[set].cards).length)]];
+} // Takes string "set" and returns an object of card data from set.cards 
+
 function getExpansionData(code) { // Takes string "code" and returns object with data of sets with code "code"
     var expansion = {};
     var dateArray = jsonData.sets[code].releaseDate.split("/");
@@ -33,7 +41,7 @@ function populateDropdown() { // Populates #expansionDropdown with buttons
         gens.pop = [];
 
     function createButton(code, name) {
-        return "<button class=\"dropdown-item\" type=\"button\" onclick='writeDataToDOM(\"setDataOut\", getSetData(\"" + code + "\"));toggleActive(this);'>" + name + "</button>";
+        return "<button id=\""+code+"\" class=\"dropdown-item\" type=\"button\" onclick='writeDataToDOM(\"setDataOut\", getSetData(\""+code+"\"));toggleActive(\""+code+"\");'>" + name + "</button>";
     }
     var total = 0;
     for (var key in jsonData.sets) {
@@ -59,7 +67,7 @@ function populateDropdown() { // Populates #expansionDropdown with buttons
         else if (expansion.releaseDate < 20110301) {
             gens.gen4.push(expansion);
         }
-        else if (expansion.releaseDate < 20131012 || expansion.code === "bw11") {
+        else if (expansion.releaseDate < 20131012 || expansion.code === "bw11") { // bw11 was released after xyp so requires special handling
             gens.gen5.push(expansion);
         }
         else if (expansion.releaseDate < 20170203) {
@@ -114,9 +122,9 @@ function renameBlank(object, newName) { // Takes object and renames the blank ke
     return object;
 } // Takes object and renames the blank key "" to string newName
 
-function toggleActive(el) { // Removes class "active" from all elements with class ".dropdown-item" then adds class "active" to clicked element "el"
+function toggleActive(code) { // Removes class "active" from all elements with class ".dropdown-item" then adds class "active" to clicked element "el"
     $(".dropdown-item").attr("class", "dropdown-item");
-    $(el).attr("class", "dropdown-item active");
+    $("#"+code).attr("class", "dropdown-item active");
 } // Removes class "active" from all elements with class ".dropdown-item" then adds class "active" to clicked element "el"
 
 function writeDataToDOM(el, data) { // Writes data "data" to string of element id "el" 
@@ -218,4 +226,9 @@ function resetPage() {
         $('#text').attr('hidden', true);
         $('#graphs').attr('hidden', false);
     }
+}
+
+function changeSection (section) {
+    $('section').attr('hidden', true);
+    $('#' + section).attr('hidden', false)
 }
