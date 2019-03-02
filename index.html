@@ -94,20 +94,20 @@
 				<div class="col-6 dropdown">
 					<button class="dropdown-toggle btn btn-dark" type="button" id="totalDropdown" data-toggle="dropdown">Select Data Type</button>
 					<div class="dropdown-menu">
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('artist'));">Artist</button>
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('convertedRetreatCost'));">Converted Retreat Cost</button>
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('evolvesFrom'));">Evolves From</button>
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('hp'));">HP</button>
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('level'));">Level</button>
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('name'));">Name</button>
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('nationalPokedexNumber'));">National Pokedex Number</button>
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('rarity'));">Rarity</button>
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('subtype'));">Subtype</button>
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('supertype'));">Supertype</button>
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('types'));">Types</button>
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('weaknesses'));">Weaknesses</button>
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('evolvesTo'));">Evolves To</button>
-						<button class="dropdown-item" onclick="toggleActive(this);writeDataToDOM('allKeyOut', getAllOfKey('resistances'));">Resistances</button>
+						<button class="dropdown-item" id="dataArtist" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('artist'));">Artist</button>
+						<button class="dropdown-item" id="dataConvRetreat" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('convertedRetreatCost'));">Converted Retreat Cost</button>
+						<button class="dropdown-item" id="dataEvoFrom" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('evolvesFrom'));">Evolves From</button>
+						<button class="dropdown-item" id="dataHP" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('hp'));">HP</button>
+						<button class="dropdown-item" id="dataLevel" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('level'));">Level</button>
+						<button class="dropdown-item" id="dataName" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('name'));">Name</button>
+						<button class="dropdown-item" id="dataDexNum" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('nationalPokedexNumber'));">National Pokedex Number</button>
+						<button class="dropdown-item" id="dataRarity" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('rarity'));">Rarity</button>
+						<button class="dropdown-item" id="dataSubtype" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('subtype'));">Subtype</button>
+						<button class="dropdown-item" id="dataSupertype" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('supertype'));">Supertype</button>
+						<button class="dropdown-item" id="dataTypes" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('types'));">Types</button>
+						<button class="dropdown-item" id="dataWeak" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('weaknesses'));">Weaknesses</button>
+						<button class="dropdown-item" id="dataEvoTo" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('evolvesTo'));">Evolves To</button>
+						<button class="dropdown-item" id="dataResist" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('resistances'));">Resistances</button>
 					</div>
 				</div>
 			</div>
@@ -121,12 +121,52 @@
 				</table>
 			</div>
 		</section>
-		<section id="card" class="container-fluid" hidden>
+		<section id="card"hidden>
 			<h1 class="text-center">Random Card Viewer</h1>
-			<button onclick="writeDataToDOM('cardOut', randomCard(randomSet()))">Generate Card</button>
-			<table>
-				<tbody id="cardOut">&nbsp;</tbody>
-			</table>
+			<button onclick="createCard()">Generate Card</button>
+				<div id="cardBorder" class="jumbotron">
+					<div id="cardDraw" class="container-fluid Colorless">
+						<div class="row">
+							<span id="cardName" class="col-9">&nbsp;</span>
+							<span id="cardHP" class="col-3 text-right">&nbsp;</span>
+						</div>
+						<div class="row">
+							<span id="cardStage" class="col-6">&nbsp;</span>
+							<span id="cardType" class="col-6 text-right">&nbsp;</span>
+						</div>
+						<hr>
+						<div class="row">
+							<span id="cardEvoFrom" class="col-6">&nbsp;</span>
+							<span id="cardEvoTo" class="col-6 text-right">&nbsp;</span>
+						</div>
+						<hr>
+						<div class="row">
+							<span id="cardLevel" class="col-6">&nbsp;</span>
+							<span id="cardDex" class="col-6 text-right">&nbsp;</span>
+						</div>
+						<hr>
+						<div class="row">
+							<span id="cardBody" class="col-12 text center">&nbsp;</span>
+						</div>
+						<hr>
+						<div class="row">
+							<span id="cardWeakness" class="col-6">&nbsp;</span>
+							<span id="cardResistance" class="col-6 text-right">&nbsp;</span>
+						</div>
+						<hr>
+						<div class="row">
+							<span id="cardRetreat" class="col-5">&nbsp;</span>
+							<span id="cardArtist" class="col-7 text-right">&nbsp;</span>
+						</div>
+						<hr>
+						<div class="row">
+							<span id="cardRarity" class="col-6">&nbsp;</span>
+							<span id="cardSet" class="col-2">&nbsp;</span>
+							<span id="cardNumber" class="col-4 text-right">&nbsp;</span>
+						</div>
+					</div>
+				</div>
+			</div>
 		</section>
 	</main>
 	<footer id="footer" class="container-fluid text-light bg-dark text-center">
