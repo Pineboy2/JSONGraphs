@@ -20,7 +20,7 @@ function makeGraphs(cardData) {
         }
     }
     cdx = crossfilter(cdx);
-    showCardsPerSet(ndx);
+    showCardsPerSet(ndx, cardData);
     showArtistsPerSet(ndx, cardData);
     showRarityPerSet(ndx, cardData);
     showAllTypes(cdx);
@@ -28,26 +28,37 @@ function makeGraphs(cardData) {
     dc.renderAll();
 }
 
-function showCardsPerSet(ndx) {
-    var dim = ndx.dimension(function(d) {
-        return [d.name, d.cards.length, d.releaseDate];
-    });
-    var group = dim.group();
+function showCardsPerSet(ndx, cardData) {
+    var dim = ndx.dimension(dc.pluck("code"));
+    var group = dim.group().reduce(
+        function add(p, v) {
+            console.log(v.cards.length)
+            p.total++;
+            p.cards += v.cards.length
+            return p;
+        },
+        function remove(p, v) {
+            p.total--;
+            p.cards -= v.cards.length
+            return p;
+        },
+        function initialise() {
+            return { total: 0, cards: 0 };
+        }
+    );
     dc.barChart("#CardsPerSet")
+        .valueAccessor(function(d) { return d.value.cards; })
         .keyAccessor(function(d) {
-            return d.key[0];
+            return cardData.sets[d.key].name;
         })
-        .valueAccessor(function(d) {
-            return d.key[1];
-        }) 
         .margins({ top: 10, right: 50, bottom: 100, left: 30 })
-        .height(500)
+        .height(300)
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
         .dimension(dim)
         .group(group)
         .ordering(function(d) {
-            var dateArray = d.key[2].split("/");
+            var dateArray = cardData.sets[d.key].releaseDate.split("/");
             return parseInt(dateArray[2] + dateArray[0] + dateArray[1], 10);
         });
 }
@@ -165,11 +176,11 @@ function showArtistsPerSet(ndx, cardData) {
         .stack(artistsGroup, "Other", function(d) {
             return d.value.other;
         })
-        .height(500)
-        .margins({ top: 10, right: 50, bottom: 100, left: 30 })
+        .height(300)
+        .margins({ top: 10, right: 10, bottom: 30, left: 140 })
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
-        .legend(dc.legend().horizontal(true).itemWidth(110).x("50"))
+        .legend(dc.legend())
         .ordering(function(d) {
             var dateArray = cardData.sets[d.key].releaseDate.split("/");
             return parseInt(dateArray[2] + dateArray[0] + dateArray[1], 10);
@@ -218,7 +229,7 @@ function showRarityPerSet(ndx, cardData) {
         function remove(p, v) {
             p.total--;
             v.cards.forEach(function(elem) {
-                if (elem.artist == "Common") {
+                if (elem.rarity == "Common") {
                     p.common--;
                 }
                 else if (elem.rarity == "Uncommon") {
@@ -271,7 +282,7 @@ function showRarityPerSet(ndx, cardData) {
         .stack(artistsGroup, "Rare Holo", function(d) {
             return d.value.rareHolo;
         })
-        .stack(artistsGroup, "Rare Holo ex/Lv.X/EX/GX", function(d) {
+        .stack(artistsGroup, "ex/Lv.X/EX/GX", function(d) {
             return d.value.rareHoloX;
         })
         .stack(artistsGroup, "Rare Ultra", function(d) {
@@ -289,11 +300,11 @@ function showRarityPerSet(ndx, cardData) {
         .stack(artistsGroup, "Other", function(d) {
             return d.value.other;
         })
-        .height(500)
-        .margins({ top: 10, right: 50, bottom: 100, left: 30 })
+        .height(300)
+        .margins({ top: 10, right: 10, bottom: 30, left: 115 })
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
-        .legend(dc.legend().horizontal(true).itemWidth(95).x("50"))
+        .legend(dc.legend())
         .ordering(function(d) {
             var dateArray = cardData.sets[d.key].releaseDate.split("/");
             return parseInt(dateArray[2] + dateArray[0] + dateArray[1], 10);
@@ -317,12 +328,12 @@ function showAllTypes(cdx, cardData) {
     dc.pieChart("#CardTypes")
         .dimension(typesDim)
         .group(typesGroup)
-        .height("400")
-        .radius("150")
-        .innerRadius("75")
+        .height("300")
+        .radius("100")
+        .innerRadius("50")
         .colorAccessor(function(d) { return d.key[0]; })
         .colors(typeColors)
-        .legend(dc.legend().horizontal(true).legendWidth("320"));
+        .legend(dc.legend().horizontal(true).legendWidth("250"));
 }
 
 function showSupertypes(cdx, cardData) {
@@ -331,9 +342,9 @@ function showSupertypes(cdx, cardData) {
     dc.pieChart("#Supertypes")
         .dimension(typesDim)
         .group(typesGroup)
-        .height("400")
-        .radius("150")
-        .innerRadius("75")
+        .height("300")
+        .radius("100")
+        .innerRadius("50")
         .colors(d3.scaleOrdinal().range(['red', 'green', 'blue']))
-        .legend(dc.legend().horizontal(true).legendWidth("320"));
+        .legend(dc.legend().horizontal(true).legendWidth("250"));
 }
