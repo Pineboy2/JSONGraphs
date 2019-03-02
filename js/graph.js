@@ -32,7 +32,6 @@ function showCardsPerSet(ndx, cardData) {
     var dim = ndx.dimension(dc.pluck("code"));
     var group = dim.group().reduce(
         function add(p, v) {
-            console.log(v.cards.length)
             p.total++;
             p.cards += v.cards.length
             return p;
