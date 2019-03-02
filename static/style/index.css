@@ -1,86 +1,16 @@
-html{
-    height:100%;
+/* Start Loading */
+
+#loading {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: white;
+    z-index: 9999;
 }
 
-#header {
-    width: 100%;
-    z-index: 9998;
-}
-
-#main {
-    overflow-y: scroll;
-    overflow-x: hidden;
-    height: calc(100vh - 100px);
-}
-
-#graphs {
-    padding: 0;
-}
-
-#footer{
-    padding-top: 3px;
-    padding-bottom: 3px;
-    height: 44px;
-}
-
-tr:nth-child(even) {
-    background-color: #dedede;
-}
-
-tr:nth-child(odd) {
-    background-color: #eeeeee;
-}
-
-tr:nth-child(even) .subTable tr:nth-child(even) {
-    background-color: #cecece;
-}
-
-tr:nth-child(even) .subTable tr:nth-child(odd) {
-    background-color: #eeeeee;
-}
-
-tr:nth-child(odd) .subTable tr:nth-child(even) {
-    background-color: #dedede;
-}
-
-tr:nth-child(odd) .subTable tr:nth-child(odd) {
-    background-color: #fefefe;
-}
-
-tr:nth-child(odd) .subTable td:nth-child(even) {
-    text-align: right;
-}
-
-td {
-    padding: 0;
-}
-
-.dropdown-menu {
-    overflow-x: hidden;
-    max-height: 75vh;
-}
-
-#expansionDropdownMenu {
-    overflow-y: scroll;
-}
-
-#expansionDropdownMenu>button {
-    cursor: pointer;
-}
-
-th {
-    color: white;
-    background-color: #777;
-}
-
-.dropdown-toggle {
-    width: 100%;
-}
-
-ul {
+#loading ul {
     list-style-type: none;
     padding-left: 0;
-    margin-bottom: 0;
 }
 
 #loadingAlign {
@@ -89,21 +19,13 @@ ul {
     align-items: center;
 }
 
-.loadingIcon {
+#loadingSpinner {
     border: 16px solid #f3f3f3;
     border-top: 16px solid #f77;
     border-radius: 50%;
     width: 120px;
     height: 120px;
     animation: spin 2s ease-in-out infinite;
-}
-
-#loading {
-    background-color: #fff;
-    width: 100vw;
-    height: 100vh;
-    z-index: 9999;
-    position: fixed;
 }
 
 @keyframes spin {
@@ -125,8 +47,37 @@ ul {
     }
 }
 
-.diagonalX .x.axis text {
-    text-anchor: end !important;
-    transform: rotate(-60deg) translateY(-5px) translateX(-5px);
-    font-size: 70%;
+/* End Loading */
+/* Start Header */
+
+#header .btn {
+    border: 2px solid grey;
 }
+
+/* End Header */
+/* Start Graphs */
+
+#tableRow {
+    padding: 0;
+}
+
+#tableRow tr:nth-child(even) {
+    background-color: #eee;
+}
+
+#tableRow tr:nth-child(even) tr:nth-child(even) {
+    background-color: #ddd;
+}
+
+#graphs>div>div{
+    width: 100%;
+}
+
+/* End Graphs */
+/* Start Footer */
+
+#footer small {
+    width: 100%;
+}
+
+/* End Footer */
