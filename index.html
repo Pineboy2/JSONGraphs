@@ -27,9 +27,9 @@
 
 <body>
 	<div id="loading" class="container-fluid">
-		<div id="loadingAlign" class="row d-flex align-items-center justify-content-center">
+		<div id="loadingAlign" class="row justify-content-center">
 			<ul>
-				<li class="loadingIcon"></li>
+				<li id="loadingSpinner"></li>
 				<li class="text-center text-muted">Loading JSON</li>
 			</ul>
 		</div>
@@ -42,8 +42,7 @@
 		<button class="btn btn-dark" onclick="resetPage()">Reset All</button>
 	</header>
 	<main id="main">
-		<section id="graphs" class="container-fluid">
-			<h1 class="text-center">Graph Viewer</h1>
+		<section id="graphs" class="container-fluid" hidden="hidden">
 			<div class="row">
 				<h2 class="col-6">Number of cards per set</h2>
 				<h2 class="col-3">Types of cards</h2>
@@ -66,7 +65,6 @@
 			</div>
 		</section>
 		<section id="text" class="container-fluid" hidden>
-			<h1 class="text-center">Text Viewer</h1>
 			<div class="row">
 				<div class="col-6 dropdown">
 					<button class="dropdown-toggle btn btn-dark" type="button" id="expansionDropdown" data-toggle="dropdown">Select Expansion</button>
@@ -122,7 +120,6 @@
 			</div>
 		</section>
 		<section id="card"hidden>
-			<h1 class="text-center">Random Card Viewer</h1>
 			<button onclick="createCard()">Generate Card</button>
 				<div id="cardBorder" class="jumbotron">
 					<div id="cardDraw" class="container-fluid Colorless">
@@ -171,9 +168,7 @@
 	</main>
 	<footer id="footer" class="container-fluid text-light bg-dark text-center">
 		<div class="row">
-			<small class="text-muted col-1">&nbsp;</small>
-			<small class="text-muted col-5">This website is not produced, endorsed, supported, or affiliated with<br> <a href="https://www.nintendo.co.uk/">Nintendo</a> or <a href="https://www.pokemon.com/uk/">The Pokémon Company</a>.</small>
-			<small class="text-muted col-5">Card data obtained from the pokemontcg.io<br><a href="https://pokemontcg.io/">website</a> and <a href="https://github.com/PokemonTCG/pokemon-tcg-data">repository.</a></small>
+			<small class="text-muted text-center">Card data obtained from the pokemontcg.io<br><a href="https://pokemontcg.io/">website</a> and <a href="https://github.com/PokemonTCG/pokemon-tcg-data">repository.</a></small>
 		</div>
 	</footer>
 </body>
