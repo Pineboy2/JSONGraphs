@@ -69,8 +69,15 @@
     background-color: #ddd;
 }
 
-#graphs>div>div{
-    width: 100%;
+#graphs{
+    width: 95vw;
+    margin: 0;
+    padding: 0 0 0 10px;
+}
+
+.diagonalX .x.axis text {
+    text-anchor: end !important;
+    transform: rotate(-70deg) translateY(-5px) translateX(-5px);
 }
 
 /* End Graphs */
