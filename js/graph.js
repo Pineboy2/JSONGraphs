@@ -20,53 +20,52 @@ function makeGraphs(cardData) {
         }
     }
     cdx = crossfilter(cdx);
-    showCardsPerSet(ndx, cardData);
-    showArtistsPerSet(ndx, cardData);
-    showRarityPerSet(ndx, cardData);
+    showCardsPerSet(ndx);
+    showArtistsPerSet(ndx);
+    showRarityPerSet(ndx);
     showAllTypes(cdx);
-    showSupertypes(cdx)
+    showSupertypes(cdx);
+    cardsPerYear(ndx);
     dc.renderAll();
 }
 
-function showCardsPerSet(ndx, cardData) {
-    var dim = ndx.dimension(dc.pluck("code"));
+function showCardsPerSet(ndx) {
+    var dim = ndx.dimension(dc.pluck("name"));
     var group = dim.group().reduce(
         function add(p, v) {
-            p.total++;
-            p.cards += v.cards.length
+            p.total += v.cards.length;
+            p.date = v.releaseDate
             return p;
         },
         function remove(p, v) {
-            p.total--;
-            p.cards -= v.cards.length
+            p.total -= v.cards.length;
+            p.date = v.releaseDate
             return p;
         },
         function initialise() {
-            return { total: 0, cards: 0 };
+            return { total: 0, date: null };
         }
     );
     dc.barChart("#CardsPerSet")
-        .valueAccessor(function(d) { return d.value.cards; })
-        .keyAccessor(function(d) {
-            return cardData.sets[d.key].name;
-        })
-        .margins({ top: 10, right: 50, bottom: 100, left: 30 })
+        .valueAccessor(function(p) { return p.value.total; })
+        .margins({ top: 10, right: 10, bottom: 30, left: 30 })
         .height(300)
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
         .dimension(dim)
         .group(group)
-        .ordering(function(d) {
-            var dateArray = cardData.sets[d.key].releaseDate.split("/");
+        .ordering(function(d) { // Convert mm/dd/yyyy to yyyymmdd 
+            var dateArray = d.value.date.split("/");
             return parseInt(dateArray[2] + dateArray[0] + dateArray[1], 10);
         });
 }
 
-function showArtistsPerSet(ndx, cardData) {
-    var dim = ndx.dimension(dc.pluck("code"));
+function showArtistsPerSet(ndx) {
+    var dim = ndx.dimension(dc.pluck("name"));
     var artistsGroup = dim.group().reduce(
         function add(p, v) {
             p.total++;
+            p.date = v.releaseDate
             v.cards.forEach(function(elem) {
                 if (elem.artist == "Ken Sugimori") {
                     p.kSugimori++;
@@ -103,6 +102,7 @@ function showArtistsPerSet(ndx, cardData) {
         },
         function remove(p, v) {
             p.total--;
+            p.date = v.releaseDate
             v.cards.forEach(function(elem) {
                 if (elem.artist == "Ken Sugimori") {
                     p.kSugimori--;
@@ -138,16 +138,13 @@ function showArtistsPerSet(ndx, cardData) {
             return p;
         },
         function initialise() {
-            return { total: 0, kSugimori: 0, fBan: 0, mArita: 0, kHimeno: 0, kSaitou: 0, rUeda: 0, mFukuda: 0, aNishida: 0, mHarada: 0, other: 0 };
+            return { total: 0, kSugimori: 0, fBan: 0, mArita: 0, kHimeno: 0, kSaitou: 0, rUeda: 0, mFukuda: 0, aNishida: 0, mHarada: 0, other: 0, date: null };
         }
     );
     var artistStack = dc.barChart("#ArtistStack")
         .dimension(dim)
         .group(artistsGroup, "Ken Sugimori")
         .valueAccessor(function(d) { return d.value.kSugimori; })
-        .keyAccessor(function(d) {
-            return cardData.sets[d.key].name;
-        })
         .stack(artistsGroup, "5ban Graphics", function(d) {
             return d.value.fBan;
         })
@@ -180,17 +177,18 @@ function showArtistsPerSet(ndx, cardData) {
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
         .legend(dc.legend())
-        .ordering(function(d) {
-            var dateArray = cardData.sets[d.key].releaseDate.split("/");
+        .ordering(function(d) { // Convert mm/dd/yyyy to yyyymmdd 
+            var dateArray = d.value.date.split("/");
             return parseInt(dateArray[2] + dateArray[0] + dateArray[1], 10);
         });
 }
 
-function showRarityPerSet(ndx, cardData) {
-    var dim = ndx.dimension(dc.pluck("code"));
+function showRarityPerSet(ndx) {
+    var dim = ndx.dimension(dc.pluck("name"));
     var artistsGroup = dim.group().reduce(
         function add(p, v) {
             p.total++;
+            p.date = v.releaseDate
             v.cards.forEach(function(elem) {
                 if (elem.rarity == "Common") {
                     p.common++;
@@ -227,6 +225,7 @@ function showRarityPerSet(ndx, cardData) {
         },
         function remove(p, v) {
             p.total--;
+            p.date = v.releaseDate
             v.cards.forEach(function(elem) {
                 if (elem.rarity == "Common") {
                     p.common--;
@@ -262,16 +261,13 @@ function showRarityPerSet(ndx, cardData) {
             return p;
         },
         function initialise() {
-            return { total: 0, common: 0, uncommon: 0, rare: 0, rareHolo: 0, rareHoloX: 0, rareUltra: 0, rareBREAK: 0, rarePrime: 0, promo: 0, other: 0 };
+            return { total: 0, common: 0, uncommon: 0, rare: 0, rareHolo: 0, rareHoloX: 0, rareUltra: 0, rareBREAK: 0, rarePrime: 0, promo: 0, other: 0, date: null };
         }
     );
-    dc.barChart("#RarityPie")
+    dc.barChart("#RarityStack")
         .dimension(dim)
         .group(artistsGroup, "Common")
         .valueAccessor(function(d) { return d.value.common; })
-        .keyAccessor(function(d) {
-            return cardData.sets[d.key].name;
-        })
         .stack(artistsGroup, "Uncommon", function(d) {
             return d.value.uncommon;
         })
@@ -304,8 +300,8 @@ function showRarityPerSet(ndx, cardData) {
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
         .legend(dc.legend())
-        .ordering(function(d) {
-            var dateArray = cardData.sets[d.key].releaseDate.split("/");
+        .ordering(function(d) { // Convert mm/dd/yyyy to yyyymmdd 
+            var dateArray = d.value.date.split("/");
             return parseInt(dateArray[2] + dateArray[0] + dateArray[1], 10);
         });
 }
@@ -346,4 +342,12 @@ function showSupertypes(cdx, cardData) {
         .innerRadius("50")
         .colors(d3.scaleOrdinal().range(['red', 'green', 'blue']))
         .legend(dc.legend().horizontal(true).legendWidth("250"));
+}
+
+function cardsPerYear(ndx) {
+    var dim = ndx.dimension(dc.pluck("releaseDate"));
+    var group = dim.group();
+    dc.lineChart("#CardsPerYear")
+        .dimension(dim)
+        .group(group)
 }
