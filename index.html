@@ -39,29 +39,22 @@
 		<button class="btn btn-dark" onclick="changeSection('graphs')">Graph Viewer</button>
 		<button class="btn btn-dark" onclick="changeSection('text')">Text Viewer</button>
 		<button class="btn btn-dark" onclick="changeSection('card')">Random Card Viewer</button>
-		<button class="btn btn-dark" onclick="resetPage()">Reset All</button>
+		<button class="btn btn-dark" onclick="location.reload()">Reset All</button>
 	</header>
 	<main id="main">
-		<section id="graphs" class="container-fluid" hidden="hidden">
+		<section id="graphs" class="container-fluid">
 			<div class="row">
-				<h2 class="col-6">Number of cards per set</h2>
-				<h2 class="col-3">Types of cards</h2>
-				<h2 class="col-3">Types of pokemon cards</h2>
-				<div id="CardsPerSet" class="col-6 diagonalX">&nbsp;</div>
-				<div id="Supertypes" class="col-3">&nbsp;</div>
-				<div id="CardTypes" class="col-3">&nbsp;</div>
+				<div id="RarityToHP" class="col-6">&nbsp;</div>
 			</div>
 			<div class="row">
-				<h2 class="col-6">Number of artists in each set</h2>
-				<h2 class="col-3">&nbsp;</h2>
-				<h2 class="col-3">&nbsp;</h2>
-				<div id="ArtistStack" class="col-6 diagonalX">&nbsp;</div>
+				<div id="CardsPerSet" class="col-12 diagonalX">&nbsp;</div>
+				<div id="ArtistStack" class="col-12 diagonalX">&nbsp;</div>
+				<div id="RarityStack" class="col-12 diagonalX">&nbsp;</div>
 			</div>
 			<div class="row">
-				<h2 class="col-6">Different rarity levels in each set</h2>
-				<h2 class="col-3">&nbsp;</h2>
-				<h2 class="col-3">&nbsp;</h2>
-				<div id="RarityPie" class="col-6 diagonalX">&nbsp;</div>
+				<div id="Supertypes" class="col-6">&nbsp;</div>
+				<div id="CardTypes" class="col-6">&nbsp;</div>
+				<div id="CardsPerYear" class="col-6">&nbsp;</div>
 			</div>
 		</section>
 		<section id="text" class="container-fluid" hidden>
