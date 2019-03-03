@@ -4,6 +4,7 @@ $.when(
     $.getJSON('js/cards.json')
 ).done(function(json) {
     makeGraphs(json);
+    window.onresize = function() { dc.renderAll(); }
 });
 
 function makeGraphs(cardData) {
@@ -25,7 +26,9 @@ function makeGraphs(cardData) {
     showRarityPerSet(ndx);
     showAllTypes(cdx);
     showSupertypes(cdx);
+    rarityToHP(cdx);
     cardsPerYear(ndx);
+
     dc.renderAll();
 }
 
@@ -48,7 +51,7 @@ function showCardsPerSet(ndx) {
     );
     dc.barChart("#CardsPerSet")
         .valueAccessor(function(p) { return p.value.total; })
-        .margins({ top: 10, right: 10, bottom: 30, left: 30 })
+        .margins({ top: 10, right: 10, bottom: 130, left: 30 })
         .height(300)
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
@@ -173,7 +176,7 @@ function showArtistsPerSet(ndx) {
             return d.value.other;
         })
         .height(300)
-        .margins({ top: 10, right: 10, bottom: 30, left: 140 })
+        .margins({ top: 10, right: 10, bottom: 130, left: 140 })
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
         .legend(dc.legend())
@@ -296,7 +299,7 @@ function showRarityPerSet(ndx) {
             return d.value.other;
         })
         .height(300)
-        .margins({ top: 10, right: 10, bottom: 30, left: 115 })
+        .margins({ top: 10, right: 10, bottom: 130, left: 115 })
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
         .legend(dc.legend())
@@ -350,4 +353,51 @@ function cardsPerYear(ndx) {
     dc.lineChart("#CardsPerYear")
         .dimension(dim)
         .group(group)
+}
+
+function rarityToHP(cdx) {
+
+    var dim = cdx.dimension(function(d) {
+        if (d.supertype != "Trainer" && d.supertype != "Energy" && d.convertedRetreatCost != undefined && d.hp != undefined) {
+            //console.log([parseInt(d.convertedRetreatCost), parseInt(d.hp)]);
+            return [parseInt(d.convertedRetreatCost), parseInt(d.hp)];
+        }
+    })
+    var group = dim.group()
+    /*var dim = cdx.dimension(dc.pluck("hp"))
+    var group = dim.group().reduce(
+        function add(p, v) {
+            p.total ++;
+            p.hp += v.hp
+            p.rarity += v.convertedRetreatCost
+            return p;
+        },
+        function remove(p, v) {
+            p.total --;
+            p.hp -= v.hp
+            p.rarity -= v.convertedRetreatCost
+            return p;
+        },
+        function initialise() {
+            return { total: 0, hp: 0, rarity: 0 };
+        }
+    );*/
+    //console.log(dim.top(10))
+    console.log(group.all())
+    dc.bubbleChart("#RarityToHP")
+        //.margins({ top: 10, right: 10, bottom: 130, left: 30 })
+        //.height(300)
+        //.x(d3.scaleBand())
+        //.xUnits(dc.units.ordinal)
+        .dimension(dim)
+        .group(group)
+        .keyAccessor(function(p) {
+            return p.value.hp
+        })
+        .valueAccessor(function(p) {
+            return p.value.rarity
+        })
+        .radiusValueAccessor(function(p) {
+            return p.value.total;
+        })
 }
