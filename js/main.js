@@ -214,21 +214,6 @@ function getAllFromSet(key, set) { // Takes key name string "key" and set name o
     return allKeys;
 } // Takes key name string "key" and set name object property "set" and returns object with all keys in "set" with name "key"
 
-function resetPage() {
-    if ($('#graphs').attr("hidden") === "hidden") {
-        $('#setDataOut').empty();
-        $('#allKeyOut').empty();
-        $('#expansionDropdown')[0].innerText = "Select Expansion";
-        $('#totalDropdown')[0].innerText = "Select Data Type";
-        $(".dropdown-item").attr("class", "dropdown-item");
-    }
-    else {
-        dc.refocusAll();
-        $('#text').attr('hidden', true);
-        $('#graphs').attr('hidden', false);
-    }
-}
-
 function changeSection(section) {
     $('section').attr('hidden', true);
     $('#' + section).attr('hidden', false)
