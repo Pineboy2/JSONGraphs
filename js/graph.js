@@ -1,19 +1,21 @@
 dc.config.defaultColors(d3.scaleSequential(d3.interpolatePiYG));
+var ndx = null;
+var cdx = null;
 
 $.when(
     $.getJSON('js/cards.json')
 ).done(function(json) {
     makeGraphs(json);
-    window.onresize = function() { dc.renderAll(); }
+    //window.onresize = function() { dc.renderAll(); }
 });
 
 function makeGraphs(cardData) {
-    var ndx = []; // Full Sets
+    ndx = []; // Full Sets
     for (var set in cardData.sets) {
         ndx.push(cardData.sets[set]);
     }
     ndx = crossfilter(ndx);
-    var cdx = []; // Individual Cards
+    cdx = []; // Individual Cards
     for (var set in cardData.sets) {
         for (var card in cardData.sets[set].cards) {
             cdx.push(cardData.sets[set].cards[card]);
@@ -28,6 +30,7 @@ function makeGraphs(cardData) {
     showSupertypes(cdx);
     rarityToHP(cdx);
     cardsPerYear(ndx);
+
 
     dc.renderAll();
 }
@@ -348,9 +351,16 @@ function showSupertypes(cdx, cardData) {
 }
 
 function cardsPerYear(ndx) {
-    var dim = ndx.dimension(dc.pluck("releaseDate"));
+    var dim = ndx.dimension(function(d) {
+        return d.releaseDate.split("/")[2]
+    });
     var group = dim.group();
     dc.lineChart("#CardsPerYear")
+        .margins({ top: 10, right: 10, bottom: 30, left: 30 })
+        .height(300)
+        .x(d3.scaleBand())
+        //.curve(d3.curveCatmullRom.alpha(0.5))
+        .xUnits(dc.units.ordinal)
         .dimension(dim)
         .group(group)
 }
@@ -364,6 +374,7 @@ function rarityToHP(cdx) {
         }
     })
     var group = dim.group()
+    console.log(group.all())
     /*var dim = cdx.dimension(dc.pluck("hp"))
     var group = dim.group().reduce(
         function add(p, v) {
@@ -383,7 +394,7 @@ function rarityToHP(cdx) {
         }
     );*/
     //console.log(dim.top(10))
-    console.log(group.all())
+    //console.log(group.all())
     dc.bubbleChart("#RarityToHP")
         //.margins({ top: 10, right: 10, bottom: 130, left: 30 })
         //.height(300)
@@ -391,13 +402,21 @@ function rarityToHP(cdx) {
         //.xUnits(dc.units.ordinal)
         .dimension(dim)
         .group(group)
+        .x(d3.scaleLinear()
+            .domain([0, 300])
+            .range([0, 1000]))
+        .y(d3.scaleLinear()
+            .domain([0, 5])
+            .range([0, 300]))
         .keyAccessor(function(p) {
-            return p.value.hp
+            console.log()
+            return p.key[1]
         })
         .valueAccessor(function(p) {
-            return p.value.rarity
+            return p.key[0]
         })
         .radiusValueAccessor(function(p) {
-            return p.value.total;
+            return p.total;
         })
+    //.render()
 }
