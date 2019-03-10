@@ -81,6 +81,18 @@
 }
 
 /* End Graphs */
+/* Start Cards */
+
+.btn-group .btn {
+    width: 100%;
+}
+
+#card .btn,
+#card img {
+    width: 100%;
+}
+
+/* End Cards */
 /* Start Footer */
 
 #footer small {

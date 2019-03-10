@@ -8,12 +8,14 @@ $(document).ready(function() { // On page load gets the JSON data from ./static/
         $("#loading").attr("hidden", true);
         $("#graphs").attr("hidden", false);
         populateDropdown();
+        populateCheckboxes();
     });
 }); // On page load gets the JSON data from ./static/js/cards.json and hide loading screen
 
-function randomSet() { // Picks a random set code from array of all sets
-    return Object.keys(jsonData.sets)[Math.floor(Math.random() * Object.keys(jsonData.sets).length)];
-} // Picks a random set code from array of all sets
+function randomSet(filter) { // Picks a random set code from array of all sets in array filter
+    //return Object.keys(jsonData.sets)[Math.floor(Math.random() * Object.keys(jsonData.sets).length)];
+    return jsonData.sets[filter[Math.floor(Math.random() * filter.length)]];
+} // Picks a random set code from array of all sets in array filter
 
 function randomCard(set) { // Takes string "set" and returns an object of card data from set.cards 
     return jsonData.sets[set].cards[Object.keys(jsonData.sets[set].cards)[Math.floor(Math.random() * Object.keys(jsonData.sets[set].cards).length)]];
@@ -29,21 +31,25 @@ function getExpansionData(code) { // Takes string "code" and returns object with
     return expansion;
 } // Takes string "code" and returns object with data of sets with code "code"
 
-function populateDropdown() { // Populates #expansionDropdown with buttons
-    var gens = {};
-    gens.gen1 = [],
-        gens.gen2 = [],
-        gens.gen3 = [],
-        gens.gen4 = [],
-        gens.gen5 = [],
-        gens.gen6 = [],
-        gens.gen7 = [],
-        gens.pop = [];
+function readCheckboxes() { // Reads checkboxes on random card viewer page and returns array of sets from checked boxes
+    var checked = [];
+    $.each($("input[type='checkbox']:checked"), function(k, v) {
+        checked.push(v.id.split("filter-")[1]);
+    });
+    return checked;
+} // Reads checkboxes on random card viewer page and returns array of sets from checked boxes
 
-    function createButton(code, name) {
-        return "<button id=\"" + code + "\" class=\"dropdown-item\" type=\"button\" onclick='writeDataToDOM(\"setDataOut\", getSetData(\"" + code + "\"));toggleActive(\"" + code + "\");'>" + name + "</button>";
-    }
-    var total = 0;
+function setsToGens() { // Return an array with an object containing all sets sorted into generations, and int total sets
+    var gens = {};
+    gens.gen1 = []
+    gens.gen2 = []
+    gens.gen3 = []
+    gens.gen4 = []
+    gens.gen5 = []
+    gens.gen6 = []
+    gens.gen7 = []
+    gens.pop = []
+    var total = 0
     for (var key in jsonData.sets) {
         total++;
         var expansion = getExpansionData(key);
@@ -77,11 +83,41 @@ function populateDropdown() { // Populates #expansionDropdown with buttons
             gens.gen7.push(expansion);
         }
     }
+    return [gens, total]
+} // Return an array with an object containing all sets sorted into generations, and int total sets
+
+function populateCheckboxes() {
+    var gens = setsToGens()[0]
+
+    function createButton(code, name, gen) {
+        return '<div class="form-check ' + gen + '">' +
+            '<input class="form-check-input" type="checkbox" value="" id="filter-' + code + '" checked="checked">' +
+            '<label class="form-check-label active" for="filter-' + code + '">' +
+            name +
+            '</label>' +
+            '</div>'
+    }
     for (var key in gens) {
         gens[key].sort(function(a, b) {
             return a.releaseDate - b.releaseDate;
         }).forEach(function(elem) {
-            $("#" + key).before(createButton(elem.code, elem.name));
+            $("#expansionFilter #" + key).before(createButton(elem.code, elem.name, key));
+        })
+    }
+}
+
+function populateDropdown() { // Populates #expansionDropdown with buttons
+    var gens = setsToGens()[0]
+    var total = setsToGens()[1]
+
+    function createButton(code, name) {
+        return "<button id=\"" + code + "\" class=\"dropdown-item\" type=\"button\" onclick='writeDataToDOM(\"setDataOut\", getSetData(\"" + code + "\"));toggleActive(\"" + code + "\");'>" + name + "</button>";
+    }
+    for (var key in gens) {
+        gens[key].sort(function(a, b) {
+            return a.releaseDate - b.releaseDate;
+        }).forEach(function(elem) {
+            $("#expansionDropdownMenu #" + key).before(createButton(elem.code, elem.name));
         })
     }
     $("#pop").after('<div class="dropdown-header">Total Expansions: ' + total + '</div>');
@@ -220,80 +256,119 @@ function changeSection(section) {
 }
 
 function createCard() {
-    var rSet = randomSet();
-    var rCard = randomCard(rSet);
-    if (rCard.supertype === "Pokémon") {
-        if (rCard.types === undefined) {
-            $("#cardDraw").attr("class", "container-fluid Colorless");
+    var filter = readCheckboxes()
+    if (filter.length >= 1) {
+        var rSet = randomSet(filter);
+        var rCard = randomCard(rSet.code);
+        $("#cardImage").attr("src", rCard.imageUrl)
+        $("#cardHiRes").attr("href", rCard.imageUrlHiRes)
+        $("#cardHiRes").html("Click to view high resolution image of " + rCard.name + " <small>(Opens in a new tab)</small>")
+        pCard = rCard
+        delete pCard.imageUrl
+        delete pCard.imageUrlHiRes
+        for (i in pCard) {
+            if ( pCard[i] instanceof Array) {
+                for (j in pCard[i]) {
+                    if ( pCard[i][j] instanceof Object) {
+                        pCard[i][j] = "<table class='table><tbody>" + objectToMarkup(pCard[i][j]) + "</tbody></table>"
+                    }
+                }
+                pCard[i] = "<table class='table><tbody>" + objectToMarkup(pCard[i]) + "</tbody></table>"
+            } else if ( pCard[i] instanceof Object) {
+                pCard[i] = "<table class='table><tbody>" + objectToMarkup(pCard[i]) + "</tbody></table>"
+            }
         }
-        else {
-            $("#cardDraw").attr("class", "container-fluid " + rCard.types[0]);
-        }
-        $("#cardName")[0].innerHTML = rCard.name
-        $("#cardHP")[0].innerHTML = "<small>HP</small> " + rCard.hp
-        $("#cardStage")[0].innerHTML = rCard.subtype
-        $("#cardType")[0].innerHTML = rCard.types
-        $("#cardDex")[0].innerHTML = "<small>No.</small> " + rCard.nationalPokedexNumber
-        if (rCard.evolvesFrom != undefined) {
-            $("#cardEvoFrom")[0].innerHTML = "<small>Evolves from</small><br>" + rCard.evolvesFrom
-        }
-        else {
-            $("#cardEvoFrom")[0].innerHTML = "<small>Evolves from</small><br>None"
-        }
-        if (rCard.evolvesTo != undefined) {
-            $("#cardEvoTo")[0].innerHTML = "<small>Evolves to</small><br>" + rCard.evolvesTo
-        }
-        else {
-            $("#cardEvoTo")[0].innerHTML = "<small>Evolves to</small><br>None"
-        }
-        if (rCard.level != undefined) {
-            $("#cardLevel")[0].innerHTML = "<small>Level</small> " + rCard.level
-        }
-        else {
-            $("#cardLevel")[0].innerHTML = "&nbsp;"
-        }
-        if (rCard.weaknesses === undefined) {
-            $("#cardWeakness")[0].innerHTML = "<small>Weaknesses</small><br>None"
-        }
-        else {
-            $("#cardWeakness")[0].innerHTML = ""
-            rCard.weaknesses.forEach(function(i) {
-                $("#cardWeakness")[0].innerHTML += "<small>Weaknesses</small><br>" + i.type + " " + i.value
-            })
-        }
-        if (rCard.resistances === undefined) {
-            $("#cardResistance")[0].innerHTML = "<small>Resistance</small><br>None"
-        }
-        else {
-            $("#cardResistance")[0].innerHTML = ""
-            rCard.resistances.forEach(function(i) {
-                $("#cardResistance")[0].innerHTML += "<small>Resistance</small><br>" + i.type + " " + i.value
-            })
-        }
-        if (rCard.convertedRetreatCost != undefined) {
-            $("#cardRetreat")[0].innerHTML = "<small>Retreat Cost</small><br>" + rCard.convertedRetreatCost + "<small>x</small>"
-        }
-        else {
-            $("#cardRetreat")[0].innerHTML = "<small>Retreat Cost</small><br>0<small>x</small>"
-        }
-        $("#cardArtist")[0].innerHTML = "<small>Illus.</small><br>" + rCard.artist
-        $("#cardRarity")[0].innerHTML = rCard.rarity
-        $("#cardSet")[0].innerHTML = rCard.setCode
-        $("#cardNumber")[0].innerHTML = rCard.number + "/" + jsonData.sets[rSet].cards.length
-        $("#cardBody")[0].innerHTML = "";
-        if (rCard.ability != undefined) {
-            $("#cardBody")[0].innerHTML += "<small>Ability</small> " + rCard.ability + "<br>"
-        }
-        if (rCard.attacks != undefined) {
-            rCard.attacks.forEach(function(i) {
-                $("#cardBody")[0].innerHTML += "<small>Attack " + parseInt(rCard.attacks.indexOf(i) + 1) + "</small> " + i + "<br>"
-            });
-        }
-        //pCard = rCard;
-        // Still need rCard.attacks, rCard.ability, rCard.text
-        //["imageUrl", "imageUrlHiRes", "name", "hp", "subtype", "types", "weaknesses", "resistances", "convertedRetreatCost", "artist", "rarity", "set", "id", "series", "setCode", "supertype", "retreatCost", "nationalPokedexNumber", "number", "evolvesFrom", "evolvesTo", "level", "attacks", "ability", "text"].forEach(function(i) {
-        //    delete pCard[i]
-        //})
+        $("#cardData").html(objectToMarkup(pCard))
+        //for (i in rCard) {console.log(i + "\t" + rCard[i] + "\t" + typeof rCard[i])}
+        
+        /*
+        if (rCard.supertype === "Pokémon") {
+            if (rCard.types === undefined) {
+                $("#cardDraw").attr("class", "container-fluid Colorless");
+            }
+            else {
+                $("#cardDraw").attr("class", "container-fluid " + rCard.types[0]);
+            }
+            $("#cardName")[0].innerHTML = rCard.name
+            $("#cardHP")[0].innerHTML = "<small>HP</small> " + rCard.hp
+            $("#cardStage")[0].innerHTML = rCard.subtype
+            $("#cardType")[0].innerHTML = rCard.types
+            $("#cardDex")[0].innerHTML = "<small>No.</small> " + rCard.nationalPokedexNumber
+            if (rCard.evolvesFrom != undefined) {
+                $("#cardEvoFrom")[0].innerHTML = "<small>Evolves from</small><br>" + rCard.evolvesFrom
+            }
+            else {
+                $("#cardEvoFrom")[0].innerHTML = "<small>Evolves from</small><br>None"
+            }
+            if (rCard.evolvesTo != undefined) {
+                $("#cardEvoTo")[0].innerHTML = "<small>Evolves to</small><br>" + rCard.evolvesTo
+            }
+            else {
+                $("#cardEvoTo")[0].innerHTML = "<small>Evolves to</small><br>None"
+            }
+            if (rCard.level != undefined) {
+                $("#cardLevel")[0].innerHTML = "<small>Level</small> " + rCard.level
+            }
+            else {
+                $("#cardLevel")[0].innerHTML = "&nbsp;"
+            }
+            if (rCard.weaknesses === undefined) {
+                $("#cardWeakness")[0].innerHTML = "<small>Weaknesses</small><br>None"
+            }
+            else {
+                $("#cardWeakness")[0].innerHTML = ""
+                rCard.weaknesses.forEach(function(i) {
+                    $("#cardWeakness")[0].innerHTML += "<small>Weaknesses</small><br>" + i.type + " " + i.value
+                })
+            }
+            if (rCard.resistances === undefined) {
+                $("#cardResistance")[0].innerHTML = "<small>Resistance</small><br>None"
+            }
+            else {
+                $("#cardResistance")[0].innerHTML = ""
+                rCard.resistances.forEach(function(i) {
+                    $("#cardResistance")[0].innerHTML += "<small>Resistance</small><br>" + i.type + " " + i.value
+                })
+            }
+            if (rCard.convertedRetreatCost != undefined) {
+                $("#cardRetreat")[0].innerHTML = "<small>Retreat Cost</small><br>" + rCard.convertedRetreatCost + "<small>x</small>"
+            }
+            else {
+                $("#cardRetreat")[0].innerHTML = "<small>Retreat Cost</small><br>0<small>x</small>"
+            }
+            $("#cardArtist")[0].innerHTML = "<small>Illus.</small><br>" + rCard.artist
+            $("#cardRarity")[0].innerHTML = rCard.rarity
+            $("#cardSet")[0].innerHTML = rCard.setCode
+            $("#cardNumber")[0].innerHTML = rCard.number + "/" + rSet.cards.length
+            $("#cardBody")[0].innerHTML = "";
+            if (rCard.ability != undefined) {
+                $("#cardBody")[0].innerHTML += "<small>Ability</small> " + rCard.ability + "<br>"
+            }
+            if (rCard.attacks != undefined) {
+                rCard.attacks.forEach(function(i) {
+                    $("#cardBody")[0].innerHTML += "<small>Attack " + parseInt(rCard.attacks.indexOf(i) + 1) + "</small> " + i + "<br>"
+                });
+            }
+            //pCard = rCard;
+            // Still need rCard.attacks, rCard.ability, rCard.text
+            //["imageUrl", "imageUrlHiRes", "name", "hp", "subtype", "types", "weaknesses", "resistances", "convertedRetreatCost", "artist", "rarity", "set", "id", "series", "setCode", "supertype", "retreatCost", "nationalPokedexNumber", "number", "evolvesFrom", "evolvesTo", "level", "attacks", "ability", "text"].forEach(function(i) {
+            //    delete pCard[i]
+            //})
+        }*/
+        //return pCard;
     }
-    //return pCard;
+    else {
+        alert("Please select at least one checkbox")
+    }
+}
+
+function toggleCheckbox(toggle, gen) {
+    if (toggle === "check") {
+        $('.' + gen).find('label').addClass('active')
+            .end().find('[type="checkbox"]').prop('checked', true);
+    }
+    else {
+        $('.' + gen).find('label').removeClass('active')
+            .end().find('[type="checkbox"]').prop('checked', false);
+    }
 }
