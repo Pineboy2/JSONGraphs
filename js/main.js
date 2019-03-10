@@ -260,27 +260,34 @@ function createCard() {
     if (filter.length >= 1) {
         var rSet = randomSet(filter);
         var rCard = randomCard(rSet.code);
-        $("#cardImage").attr("src", rCard.imageUrl)
-        $("#cardHiRes").attr("href", rCard.imageUrlHiRes)
+        if (rCard.imageUrl === undefined) {
+            $("#cardImage").attr("src", "static/No Image.png")
+            $("#cardHiRes").attr("href", "static/No Image.png")
+        }
+        else {
+            $("#cardImage").attr("src", rCard.imageUrl)
+            $("#cardHiRes").attr("href", rCard.imageUrlHiRes)
+        }
         $("#cardHiRes").html("Click to view high resolution image of " + rCard.name + " <small>(Opens in a new tab)</small>")
         pCard = rCard
         delete pCard.imageUrl
         delete pCard.imageUrlHiRes
         for (i in pCard) {
-            if ( pCard[i] instanceof Array) {
+            if (pCard[i] instanceof Array) {
                 for (j in pCard[i]) {
-                    if ( pCard[i][j] instanceof Object) {
+                    if (pCard[i][j] instanceof Object) {
                         pCard[i][j] = "<table class='table><tbody>" + objectToMarkup(pCard[i][j]) + "</tbody></table>"
                     }
                 }
                 pCard[i] = "<table class='table><tbody>" + objectToMarkup(pCard[i]) + "</tbody></table>"
-            } else if ( pCard[i] instanceof Object) {
+            }
+            else if (pCard[i] instanceof Object) {
                 pCard[i] = "<table class='table><tbody>" + objectToMarkup(pCard[i]) + "</tbody></table>"
             }
         }
         $("#cardData").html(objectToMarkup(pCard))
         //for (i in rCard) {console.log(i + "\t" + rCard[i] + "\t" + typeof rCard[i])}
-        
+
         /*
         if (rCard.supertype === "Pokémon") {
             if (rCard.types === undefined) {
