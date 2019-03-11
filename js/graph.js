@@ -27,8 +27,8 @@ function makeGraphs(cardData) {
     showRarityPerSet(ndx);
     showAllTypes(cdx);
     showSupertypes(cdx);
-    rarityToHP(cdx);
     cardsPerYear(ndx);
+    retreatToHP(cdx);
 
 
     dc.renderAll();
@@ -416,57 +416,39 @@ function rarityToHP2(cdx) {
         .render();
 }
 
-function rarityToHP(cdx) {
+function retreatToHP(cdx) {
+
 
     var dim = cdx.dimension(function(d) {
-        if (d.supertype != "Trainer" && d.supertype != "Energy" && d.rarity != undefined && d.hp != undefined) {
-            //console.log([parseInt(d.convertedRetreatCost), parseInt(d.hp)]);
-            var rarity = d.rarity
-            var hp = parseInt(d.hp)
-            //if (isNaN(rarity)) { rarity = 0 }
+        if (d.supertype != "Trainer" && d.supertype != "Energy" && d.convertedRetreatCost != undefined && d.hp != undefined) {
+            rarity = parseInt(d.convertedRetreatCost)
+            hp = parseInt(d.hp)
+            if (isNaN(rarity)) { rarity = 0 }
             if (isNaN(hp)) { hp = 0 }
             return [rarity, hp];
         }
     })
     var group = dim.group()
-    //console.log(group.all())
-    /*var dim = cdx.dimension(dc.pluck("hp"))
-    var group = dim.group().reduce(
-        function add(p, v) {
-            p.total ++;
-            p.hp += v.hp
-            p.rarity += v.convertedRetreatCost
-            return p;
-        },
-        function remove(p, v) {
-            p.total --;
-            p.hp -= v.hp
-            p.rarity -= v.convertedRetreatCost
-            return p;
-        },
-        function initialise() {
-            return { total: 0, hp: 0, rarity: 0 };
-        }
-    );*/
-    //console.log(dim.top(10))
-    //console.log(group.all())
-    dc.bubbleChart("#RarityToHP")
-                    .dimension(dim)
-                    .group(group)
-                    .yAxisLabel("Rarity")
-                    .xAxisLabel("HP")
-                    .radiusValueAccessor(function(d) { return Math.floor(d.value / 100)+1; })
-                    .keyAccessor(function(d) { return d.key[1]; })
-                    .valueAccessor(function(d) { return d.key[0]; })
-                    //.y(d3.scaleOrdinal().domain(["Common", "Uncommon", "Rare", "Rare Holo", "Rare Holo EX", "Rare Ultra", "Rare Secret", "Rare Holo GX", "Rare Holo Lv.X", "Rare BREAK", "Rare Prime", "LEGEND", "Rare ACE", "Shining", undefined]))
-                    .y(d3.scaleOrdinal().domain(function (d) {
-                        return d.rarity
-                    }))
-                    .x(d3.scaleLinear().domain([0, 300]))
-                    //.maxBubbleRelativeSize(0.03)
-                    .renderTitle(true)
-                    .title(function(p) {
-                              return "HP: " + p.key[1] + "\nRarity: " + p.key[0] + "\nCount: " + p.value
-                    })
-                    .elasticRadius(true)
+    dc.bubbleChart("#RetreatToHP")
+        .dimension(dim)
+        .group(group)
+        .yAxisLabel("Converted Retreat Cost")
+        .xAxisLabel("HP")
+        .y(d3.scaleLinear().domain([0, 5]))
+        .x(d3.scaleLinear().domain([0, 300]))
+        .xAxisPadding(10)
+        .yAxisPadding(1)
+        .radiusValueAccessor(function(d) { return Math.floor(d.value / 10); })
+        .keyAccessor(function(d) { return d.key[1]; })
+        .valueAccessor(function(d) { return d.key[0]; })
+        .maxBubbleRelativeSize(0.08)
+        .minRadius(3)
+        .renderTitle(true)
+        .title(function(p) {
+            return p.key[1] + " " + p.key[0] + ": " + p.value
+        })
+        .elasticX(true)
+        .elasticY(true)
+        .elasticRadius(true)
+    dc.renderAll()
 }

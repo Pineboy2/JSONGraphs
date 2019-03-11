@@ -8,7 +8,7 @@
 	<title>Pokemon TCG</title>
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dc/3.0.9/dc.min.css" integrity="sha384-Y80GUmIm83220i9+0yfdgpNrklk9viBBPH1DxbLOEG0B/DDxKjS/wBEuiLg6Y3mj" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dc/3.0.11/dc.min.css" integrity="sha384-Y80GUmIm83220i9+0yfdgpNrklk9viBBPH1DxbLOEG0B/DDxKjS/wBEuiLg6Y3mj" crossorigin="anonymous">
 
 	<link rel="stylesheet" href="static/style/index.css" type="text/css" />
 	<link href="static/favicon.ico" rel="icon" type="image/x-icon" />
@@ -16,9 +16,9 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js" integrity="sha384-HL96dun1KbYEq6UT/ZlsspAODCyQ+Zp4z318ajUPBPSMzy5dvxl6ziwmnil8/Cpd" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.1/d3.min.js" integrity="sha384-BokbYDFlowrP1a1EIvd0uLAj5ek+ENpMUxyXsRmUg3rSm3PrLduJA8khyDGSZxK2" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter/1.3.12/crossfilter.min.js" integrity="sha384-qIMAO7hiswCdbLggCimcQKL2VYr4shEpIgnKP+9GL4YQPHJH4tQ/lLHsaLtDFulA" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.0.9/dc.min.js" integrity="sha384-apM9RQQo07ma6HxoIAy9RZQyaDS64A0dXF1zUKzYnK67ysa6cA/A/KzNpM+PFbHs" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.0.11/dc.min.js" integrity="sha384-eCcxRdlSv4RiNIXSsFDA38b9DEBKFd1WeldmuQ2E93yB9L8DbdGuJkSxOTk7PMDB" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js" integrity="sha384-+OcaADqsJ9aPHe0bxE/y8GaaW0mTCnRuqo/QY6s16/MKpX9EPIYnY9fSnBKntdr5" crossorigin="anonymous"></script>
 
 	<script src="js/main.js"></script>
@@ -49,7 +49,7 @@
 				<div id="Supertypes" class="col-4">&nbsp;</div>
 				<div id="RarityStack" class="col-12 diagonalX">&nbsp;</div>
 				<div id="CardTypes" class="col-4">&nbsp;</div>
-				<div id="RarityToHP" class="col-8">&nbsp;</div>
+				<div id="RetreatToHP" class="col-8">&nbsp;</div>
 				<div id="ArtistStack" class="col-12 diagonalX">&nbsp;</div>
 			</div>
 		</section>
@@ -114,6 +114,8 @@
 					<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#expansionCollapse">Expansions</button>
 					<div class="collapse" id="expansionCollapse">
 						<div class="card card-body" id="expansionFilter">
+							<button class="btn btn-sm" type="button" onclick="$('#expansionFilter').find('label').addClass('active').end().find('[type=' checkbox ']').prop('checked', true);">Check All</button>
+							<button class="btn btn-sm" type="button" onclick="$('#expansionFilter').find('label').removeClass('active').end().find('[type=' checkbox ']').prop('checked', false);">Uncheck All</button>
 							<div class="small text-muted">Uncheck box to stop that expansion's cards from being picked.</div>
 							<div class="dropdown-divider"></div>
 							<div class="dropdown-header">Generation 1 Expansions</div>
@@ -179,49 +181,6 @@
 							<tbody id="cardData"></tbody>
 						</table>
 					</div>
-					<!--
-					<div id="cardBorder" class="jumbotron">
-						<div id="cardDraw" class="container-fluid Colorless">
-							<div class="row">
-								<span id="cardName" class="col-9">&nbsp;</span>
-								<span id="cardHP" class="col-3 text-right">&nbsp;</span>
-							</div>
-							<div class="row">
-								<span id="cardStage" class="col-6">&nbsp;</span>
-								<span id="cardType" class="col-6 text-right">&nbsp;</span>
-							</div>
-							<hr>
-							<div class="row">
-								<span id="cardEvoFrom" class="col-6">&nbsp;</span>
-								<span id="cardEvoTo" class="col-6 text-right">&nbsp;</span>
-							</div>
-							<hr>
-							<div class="row">
-								<span id="cardLevel" class="col-6">&nbsp;</span>
-								<span id="cardDex" class="col-6 text-right">&nbsp;</span>
-							</div>
-							<hr>
-							<div class="row">
-								<span id="cardBody" class="col-12 text center">&nbsp;</span>
-							</div>
-							<hr>
-							<div class="row">
-								<span id="cardWeakness" class="col-6">&nbsp;</span>
-								<span id="cardResistance" class="col-6 text-right">&nbsp;</span>
-							</div>
-							<hr>
-							<div class="row">
-								<span id="cardRetreat" class="col-5">&nbsp;</span>
-								<span id="cardArtist" class="col-7 text-right">&nbsp;</span>
-							</div>
-							<hr>
-							<div class="row">
-								<span id="cardRarity" class="col-6">&nbsp;</span>
-								<span id="cardSet" class="col-2">&nbsp;</span>
-								<span id="cardNumber" class="col-4 text-right">&nbsp;</span>
-							</div>
-						</div>
-					</div>-->
 				</div>
 			</div>
 		</section>
