@@ -371,11 +371,11 @@ function createCard() {
 
 function toggleCheckbox(toggle, gen) {
     if (toggle === "check") {
-        $('.' + gen).find('label').addClass('active')
+        $(gen).find('label').addClass('active')
             .end().find('[type="checkbox"]').prop('checked', true);
     }
     else {
-        $('.' + gen).find('label').removeClass('active')
+        $(gen).find('label').removeClass('active')
             .end().find('[type="checkbox"]').prop('checked', false);
     }
 }
