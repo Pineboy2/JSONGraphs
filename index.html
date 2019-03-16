@@ -44,13 +44,24 @@
 	<main id="main">
 		<section id="graphs" class="container-fluid">
 			<div class="row">
-				<div id="CardsPerSet" class="col-12 diagonalX">&nbsp;</div>
+				<div id="CardsPerSet" class="col-10 diagonalX">&nbsp;</div>
+				<span class="col-2 text-muted small text-center my-auto h-100">Chart showing number of cards in a set</span>
+				<hr class="col-12">
 				<div id="CardsPerYear" class="col-8">&nbsp;</div>
 				<div id="Supertypes" class="col-4">&nbsp;</div>
-				<div id="RarityStack" class="col-12 diagonalX">&nbsp;</div>
+				<div class="col-8 text-muted small text-center">Chart showing number of sets released per year</div>
+				<div class="col-4 text-muted small text-center">Chart showing supertype of cards</div>
+				<hr class="col-12">
+				<div id="RarityStack" class="col-10 diagonalX">&nbsp;</div>
+				<span class="col-2 text-muted small text-center my-auto h-100">Chart showing rarity of cards in each set</span>
+				<hr class="col-12">
 				<div id="CardTypes" class="col-4">&nbsp;</div>
 				<div id="RetreatToHP" class="col-8">&nbsp;</div>
-				<div id="ArtistStack" class="col-12 diagonalX">&nbsp;</div>
+				<div class="col-4 text-muted small text-center">Chart showing type(s) of cards</div>
+				<div class="col-8 text-muted small text-center">Chart showing relation between HP and retreat cost</div>
+				<hr class="col-12">
+				<div id="ArtistStack" class="col-10 diagonalX">&nbsp;</div>
+				<span class="col-2 text-muted small text-center my-auto h-100">Chart showing artist of cards in each set</span>
 			</div>
 		</section>
 		<section id="text" class="container-fluid" hidden>
@@ -111,75 +122,85 @@
 		<section id="card" class="container-fluid" hidden>
 			<div class="row">
 				<div class="col-4">
-					<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#expansionCollapse">Expansions</button>
+					<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#expansionCollapse">Selected Expansions</button>
 					<div class="collapse" id="expansionCollapse">
 						<div class="card card-body" id="expansionFilter">
-							<button class="btn btn-sm" type="button" onclick="$('#expansionFilter').find('label').addClass('active').end().find('[type=' checkbox ']').prop('checked', true);">Check All</button>
-							<button class="btn btn-sm" type="button" onclick="$('#expansionFilter').find('label').removeClass('active').end().find('[type=' checkbox ']').prop('checked', false);">Uncheck All</button>
+							<div class="btn-group" role="group">
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','#expansionFilter')">Check All</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','#expansionFilter')">Uncheck All</button>
+							</div>
 							<div class="small text-muted">Uncheck box to stop that expansion's cards from being picked.</div>
 							<div class="dropdown-divider"></div>
 							<div class="dropdown-header">Generation 1 Expansions</div>
 							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','gen1')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','gen1')">Uncheck Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen1')">Check Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen1')">Uncheck Group</button>
 							</div>
 							<div class="dropdown-divider" id="gen1"></div>
 							<div class="dropdown-header">Generation 2 Expansions</div>
 							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','gen2')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','gen2')">Uncheck Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen2')">Check Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen2')">Uncheck Group</button>
 							</div>
 							<div class="dropdown-divider" id="gen2"></div>
 							<div class="dropdown-header">Generation 3 Expansions</div>
 							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','gen3')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','gen3')">Uncheck Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen3')">Check Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen3')">Uncheck Group</button>
 							</div>
 							<div class="dropdown-divider" id="gen3"></div>
 							<div class="dropdown-header">Generation 4 Expansions</div>
 							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','gen4')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','gen4')">Uncheck Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen4')">Check Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen4')">Uncheck Group</button>
 							</div>
 							<div class="dropdown-divider" id="gen4"></div>
 							<div class="dropdown-header">Generation 5 Expansions</div>
 							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','gen5')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','gen5')">Uncheck Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen5')">Check Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen5')">Uncheck Group</button>
 							</div>
 							<div class="dropdown-divider" id="gen5"></div>
 							<div class="dropdown-header">Generation 6 Expansions</div>
 							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','gen6')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','gen6')">Uncheck Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen6')">Check Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen6')">Uncheck Group</button>
 							</div>
 							<div class="dropdown-divider" id="gen6"></div>
 							<div class="dropdown-header">Generation 7 Expansions</div>
 							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','gen7')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','gen7')">Uncheck Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen7')">Check Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen7')">Uncheck Group</button>
 							</div>
 							<div class="dropdown-divider" id="gen7"></div>
 							<div class="dropdown-header">POP Expansions</div>
 							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','pop')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','pop')">Uncheck Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.pop')">Check Group</button>
+								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.pop')">Uncheck Group</button>
 							</div>
 							<div class="dropdown-divider" id="pop"></div>
 						</div>
 					</div>
 				</div>
-				<div class="col-3">
-					<button class="btn btn-dark" onclick="createCard()">Generate Card</button><br>
-					<img src="" id="cardImage"></img><br>
-					<a href="" target="_blank" id="cardHiRes"></a>
-				</div>
-				<div class="col-5">
-					<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#dataCollapse">Card Transcript and Information</button>
-					<div class="collapse" id="dataCollapse">
-						<table class="table">
-							<tbody id="cardData"></tbody>
-						</table>
+				<div class="col-8">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-12">
+								<button class="btn btn-dark" onclick="createCard()">Generate Card</button><br>
+								<div class="text-center">
+									<img src="" id="cardImage"></img><br>
+									<a href="" target="_blank" id="cardHiRes"></a>
+								</div>
+							</div>
+							<div class="col-12">
+								<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#dataCollapse">Card Transcript and Information</button>
+								<div class="collapse" id="dataCollapse">
+									<table class="table">
+										<tbody id="cardData"></tbody>
+									</table>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
