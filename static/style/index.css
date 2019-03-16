@@ -54,6 +54,10 @@
     border: 2px solid grey;
 }
 
+#header {
+    margin-bottom: 5px;
+}
+
 /* End Header */
 /* Start Graphs */
 
@@ -70,7 +74,6 @@
 }
 
 #graphs{
-    width: 95vw;
     margin: 0;
     padding: 0 0 0 10px;
 }
@@ -87,9 +90,13 @@
     width: 100%;
 }
 
-#card .btn,
-#card img {
+#card .btn {
     width: 100%;
+}
+
+
+#card img {
+    width: 45%;
 }
 
 /* End Cards */
@@ -97,6 +104,10 @@
 
 #footer small {
     width: 100%;
+}
+
+#footer {
+    margin-top: 5px;
 }
 
 /* End Footer */
