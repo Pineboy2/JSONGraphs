@@ -5,6 +5,11 @@ $.when(
     $.getJSON('js/cards.json')
 ).done(function(json) {
     makeGraphs(json);
+    $("#loading").attr("hidden", true);
+    $("#graphs").attr("hidden", false);
+    console.log("done")
+    populateDropdown();
+    populateCheckboxes();
     //window.onresize = function() { dc.renderAll(); }
 });
 

@@ -21,7 +21,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.0.11/dc.min.js" integrity="sha384-eCcxRdlSv4RiNIXSsFDA38b9DEBKFd1WeldmuQ2E93yB9L8DbdGuJkSxOTk7PMDB" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js" integrity="sha384-+OcaADqsJ9aPHe0bxE/y8GaaW0mTCnRuqo/QY6s16/MKpX9EPIYnY9fSnBKntdr5" crossorigin="anonymous"></script>
 
-	<script src="js/main.js"></script>
 	<script src="js/graph.js"></script>
 </head>
 
@@ -36,9 +35,6 @@
 	</div>
 	<header id="header" class="navbar navbar-dark bg-dark">
 		<span class="navbar-brand">Pokemon TCG Data Dashboard</span>
-		<button class="btn btn-dark" onclick="changeSection('graphs')">Graph Viewer</button>
-		<button class="btn btn-dark" onclick="changeSection('text')">Text Viewer</button>
-		<button class="btn btn-dark" onclick="changeSection('card')">Random Card Viewer</button>
 		<button class="btn btn-dark" onclick="location.reload()">Reset All</button>
 	</header>
 	<main id="main">
@@ -48,161 +44,20 @@
 				<span class="col-2 text-muted small text-center my-auto h-100">Chart showing number of cards in a set</span>
 				<hr class="col-12">
 				<div id="CardsPerYear" class="col-8">&nbsp;</div>
-				<div id="Supertypes" class="col-4">&nbsp;</div>
+				<div id="CardTypes" class="col-4">&nbsp;</div>
 				<div class="col-8 text-muted small text-center">Chart showing number of sets released per year</div>
-				<div class="col-4 text-muted small text-center">Chart showing supertype of cards</div>
+				<div class="col-4 text-muted small text-center">Chart showing type(s) of cards</div>
 				<hr class="col-12">
 				<div id="RarityStack" class="col-10 diagonalX">&nbsp;</div>
 				<span class="col-2 text-muted small text-center my-auto h-100">Chart showing rarity of cards in each set</span>
 				<hr class="col-12">
-				<div id="CardTypes" class="col-4">&nbsp;</div>
+				<div id="Supertypes" class="col-4">&nbsp;</div>
 				<div id="RetreatToHP" class="col-8">&nbsp;</div>
-				<div class="col-4 text-muted small text-center">Chart showing type(s) of cards</div>
+				<div class="col-4 text-muted small text-center">Chart showing supertype of cards</div>
 				<div class="col-8 text-muted small text-center">Chart showing relation between HP and retreat cost</div>
 				<hr class="col-12">
 				<div id="ArtistStack" class="col-10 diagonalX">&nbsp;</div>
 				<span class="col-2 text-muted small text-center my-auto h-100">Chart showing artist of cards in each set</span>
-			</div>
-		</section>
-		<section id="text" class="container-fluid" hidden>
-			<div class="row">
-				<div class="col-6 dropdown">
-					<button class="dropdown-toggle btn btn-dark" type="button" id="expansionDropdown" data-toggle="dropdown">Select Expansion</button>
-					<div id="expansionDropdownMenu" class="dropdown-menu">
-						<button class="dropdown-item" onclick='var rSet = randomSet(Object.keys(jsonData.sets)); writeDataToDOM("setDataOut", getSetData(rSet));toggleActive(rSet);'>Random Expansion</button>
-						<div class="dropdown-divider"></div>
-						<div class="dropdown-header">Generation 1 Expansions</div>
-						<div class="dropdown-divider" id="gen1"></div>
-						<div class="dropdown-header">Generation 2 Expansions</div>
-						<div class="dropdown-divider" id="gen2"></div>
-						<div class="dropdown-header">Generation 3 Expansions</div>
-						<div class="dropdown-divider" id="gen3"></div>
-						<div class="dropdown-header">Generation 4 Expansions</div>
-						<div class="dropdown-divider" id="gen4"></div>
-						<div class="dropdown-header">Generation 5 Expansions</div>
-						<div class="dropdown-divider" id="gen5"></div>
-						<div class="dropdown-header">Generation 6 Expansions</div>
-						<div class="dropdown-divider" id="gen6"></div>
-						<div class="dropdown-header">Generation 7 Expansions</div>
-						<div class="dropdown-divider" id="gen7"></div>
-						<div class="dropdown-header">POP Expansions</div>
-						<div class="dropdown-divider" id="pop"></div>
-					</div>
-				</div>
-				<div class="col-6 dropdown">
-					<button class="dropdown-toggle btn btn-dark" type="button" id="totalDropdown" data-toggle="dropdown">Select Data Type</button>
-					<div class="dropdown-menu">
-						<button class="dropdown-item" id="dataArtist" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('artist'));">Artist</button>
-						<button class="dropdown-item" id="dataConvRetreat" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('convertedRetreatCost'));">Converted Retreat Cost</button>
-						<button class="dropdown-item" id="dataEvoFrom" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('evolvesFrom'));">Evolves From</button>
-						<button class="dropdown-item" id="dataHP" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('hp'));">HP</button>
-						<button class="dropdown-item" id="dataLevel" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('level'));">Level</button>
-						<button class="dropdown-item" id="dataName" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('name'));">Name</button>
-						<button class="dropdown-item" id="dataDexNum" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('nationalPokedexNumber'));">National Pokedex Number</button>
-						<button class="dropdown-item" id="dataRarity" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('rarity'));">Rarity</button>
-						<button class="dropdown-item" id="dataSubtype" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('subtype'));">Subtype</button>
-						<button class="dropdown-item" id="dataSupertype" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('supertype'));">Supertype</button>
-						<button class="dropdown-item" id="dataTypes" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('types'));">Types</button>
-						<button class="dropdown-item" id="dataWeak" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('weaknesses'));">Weaknesses</button>
-						<button class="dropdown-item" id="dataEvoTo" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('evolvesTo'));">Evolves To</button>
-						<button class="dropdown-item" id="dataResist" onclick="toggleActive(this.id);writeDataToDOM('allKeyOut', getAllOfKey('resistances'));">Resistances</button>
-					</div>
-				</div>
-			</div>
-			<div id="tableRow" class="row">
-				<table class="col-6">
-					<tbody id="setDataOut">
-					</tbody>
-				</table>
-				<table class="col-6">
-					<tbody id="allKeyOut"></tbody>
-				</table>
-			</div>
-		</section>
-		<section id="card" class="container-fluid" hidden>
-			<div class="row">
-				<div class="col-4">
-					<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#expansionCollapse">Selected Expansions</button>
-					<div class="collapse" id="expansionCollapse">
-						<div class="card card-body" id="expansionFilter">
-							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','#expansionFilter')">Check All</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','#expansionFilter')">Uncheck All</button>
-							</div>
-							<div class="small text-muted">Uncheck box to stop that expansion's cards from being picked.</div>
-							<div class="dropdown-divider"></div>
-							<div class="dropdown-header">Generation 1 Expansions</div>
-							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen1')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen1')">Uncheck Group</button>
-							</div>
-							<div class="dropdown-divider" id="gen1"></div>
-							<div class="dropdown-header">Generation 2 Expansions</div>
-							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen2')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen2')">Uncheck Group</button>
-							</div>
-							<div class="dropdown-divider" id="gen2"></div>
-							<div class="dropdown-header">Generation 3 Expansions</div>
-							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen3')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen3')">Uncheck Group</button>
-							</div>
-							<div class="dropdown-divider" id="gen3"></div>
-							<div class="dropdown-header">Generation 4 Expansions</div>
-							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen4')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen4')">Uncheck Group</button>
-							</div>
-							<div class="dropdown-divider" id="gen4"></div>
-							<div class="dropdown-header">Generation 5 Expansions</div>
-							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen5')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen5')">Uncheck Group</button>
-							</div>
-							<div class="dropdown-divider" id="gen5"></div>
-							<div class="dropdown-header">Generation 6 Expansions</div>
-							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen6')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen6')">Uncheck Group</button>
-							</div>
-							<div class="dropdown-divider" id="gen6"></div>
-							<div class="dropdown-header">Generation 7 Expansions</div>
-							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.gen7')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.gen7')">Uncheck Group</button>
-							</div>
-							<div class="dropdown-divider" id="gen7"></div>
-							<div class="dropdown-header">POP Expansions</div>
-							<div class="btn-group" role="group">
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('check','.pop')">Check Group</button>
-								<button class="btn btn-sm" type="button" onclick="toggleCheckbox('uncheck','.pop')">Uncheck Group</button>
-							</div>
-							<div class="dropdown-divider" id="pop"></div>
-						</div>
-					</div>
-				</div>
-				<div class="col-8">
-					<div class="container-fluid">
-						<div class="row">
-							<div class="col-12">
-								<button class="btn btn-dark" onclick="createCard()">Generate Card</button><br>
-								<div class="text-center">
-									<img src="" id="cardImage"></img><br>
-									<a href="" target="_blank" id="cardHiRes"></a>
-								</div>
-							</div>
-							<div class="col-12">
-								<button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#dataCollapse">Card Transcript and Information</button>
-								<div class="collapse" id="dataCollapse">
-									<table class="table">
-										<tbody id="cardData"></tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 		</section>
 	</main>
